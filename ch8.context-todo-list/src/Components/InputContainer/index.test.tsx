@@ -1,0 +1,53 @@
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import 'jest-styled-components';
+
+import { InputContainer } from "./index";
+
+import { ToDoListProvider } from 'Contexts';
+
+describe('<InputContainer />', () => {
+    it('renders component correctly', () => {
+        const { container } = render(<InputContainer />);
+
+        const input = screen.getByPlaceholderText('할 일을 입력해 주세요');
+        expect(input).toBeInTheDocument();
+        const button = screen.getByText('추가');
+        expect(button).toBeInTheDocument();
+
+        expect(container).toMatchSnapshot();
+    });
+
+    it('empties data after adding data', () => {
+        render(<InputContainer />);
+
+        const input = screen.getByPlaceholderText('할 일을 입력해 주세요') as HTMLInputElement;
+        const button = screen.getByText('추가');
+
+        expect(input.value).toBe('');
+        fireEvent.change(input, { target: { value: 'study react 1' } });
+        expect(input.value).toBe('study react 1');
+        fireEvent.click(button);
+        expect(input.value).toBe('');
+    });
+
+    // 컨텍스를 사용하는 부분을 테스트 한다고 해서, 난 consumer 입장에서 테스트 할 줄 알았는데, 
+    // Provider 를 바로 사용하네.
+    it('adds input data to localStorage via Context', () => {
+        render(
+            <ToDoListProvider>
+                <InputContainer />
+            </ToDoListProvider>
+        );
+
+        const input = screen.getByPlaceholderText('할 일을 입력해 주세요');
+        const button = screen.getByText('추가');
+
+        expect(localStorage.getItem('ToDoList')).toBeNull();
+
+        fireEvent.change(input, { target: { value: 'study react 1'} });
+        fireEvent.click(button);
+
+        expect(localStorage.getItem('ToDoList')).toBe('["study react 1"]');
+    })
+})
