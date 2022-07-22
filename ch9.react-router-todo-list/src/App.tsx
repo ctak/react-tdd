@@ -5,7 +5,9 @@ import { InputContainer, ToDoList } from 'Components';
 import { ToDoListProvider } from 'Contexts';
 
 import { Routes, Route } from 'react-router-dom';
-import { List, Add, Detail } from 'Pages';
+import { List, Add, Detail, NotFound } from 'Pages';
+
+import { PageHeader } from 'Components';
 
 const Container = Styled.div`
   min-height: 100vh;
@@ -22,7 +24,9 @@ function App() {
   return (
     <ToDoListProvider>
       <Container>
+        <PageHeader />
         <Routes>
+          <Route path="*" element={ <NotFound /> } />
           <Route path="/" element={
             <List />
           } />
