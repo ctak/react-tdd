@@ -33,8 +33,8 @@ describe('<Detail />', () => {
 
   it('deletes ToDo data', () => {
     const history = createMemoryHistory();
-    history.push('/');
-    history.push('/detail/0');
+    // history.push('/');
+    // history.push('/detail/0');
     localStorage.setItem('ToDoList', '["ToDo 1"]');
 
     const TestComponent = () => {
@@ -64,8 +64,10 @@ describe('<Detail />', () => {
 
     fireEvent.click(button);
 
-    // expect(url.textContent).toBe('/');
-    // expect(toDoItem).not.toBeInTheDocument();
-    expect(button).not.toBeInTheDocument();
+    setTimeout(() => {
+      expect(url.textContent).toBe('/');
+      expect(toDoItem).not.toBeInTheDocument();
+      expect(button).not.toBeInTheDocument();
+    })
   });
 });
