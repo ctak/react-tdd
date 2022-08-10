@@ -10,7 +10,7 @@ describe('<PageHeader />', () => {
   it('renders component correctly', () => {
     const history = createMemoryHistory();
 
-    render(
+    const { container } = render(
       <Router navigator={history} location="/">
         <PageHeader />
       </Router>
@@ -20,12 +20,13 @@ describe('<PageHeader />', () => {
     expect(label).toBeInTheDocument();
     const goBack = screen.queryByText('돌아가기');
     expect(goBack).not.toBeInTheDocument();
+    expect(container).toMatchSnapshot();
   });
 
   it('renders component correctly with /add URL', () => {
     const history = createMemoryHistory();
 
-    render(
+    const { container } = render(
       <Router navigator={history} location="/add">
         <PageHeader />
       </Router>
@@ -36,6 +37,7 @@ describe('<PageHeader />', () => {
     const goBack = screen.queryByText('돌아가기');
     expect(goBack).toBeInTheDocument();
     expect(goBack?.getAttribute('href')).toBe('/');
+    expect(container).toMatchSnapshot();
   });
 
   it('renders component correctly with /detail/:id URL', () => {

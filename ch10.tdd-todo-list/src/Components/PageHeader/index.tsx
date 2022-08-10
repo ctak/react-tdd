@@ -2,10 +2,32 @@ import React from "react";
 import Styled from 'styled-components';
 import { useLocation, Link } from "react-router-dom";
 
-const Container = Styled.div``;
-const Title = Styled.div``;
+const Container = Styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e40ff;
+`;
+const Title = Styled.div`
+  padding: 20px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;  
+`;
 // 추후 style 을 위해 styled-components 를 적용해 놓는다.
-const GoBack = Styled(Link)``;
+const GoBack = Styled(Link)`
+  padding: 20px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  position: absolute;
+  left: 20px;
+`;
 
 export const PageHeader = () => {
   const { pathname } = useLocation();
