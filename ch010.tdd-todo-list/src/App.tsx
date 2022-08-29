@@ -2,7 +2,8 @@ import React from 'react';
 import Styled from 'styled-components';
 import { Button, PageHeader } from 'Components';
 
-import { List } from 'Pages';
+// import { List } from 'Pages';
+// import { Add } from 'Pages';
 
 const Container = Styled.div`
   min-height: 100vh;
