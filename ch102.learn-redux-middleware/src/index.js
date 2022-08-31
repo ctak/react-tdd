@@ -4,13 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './modules';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
+import myLogger from './middlewares/myLogger';
 
-const store = createStore(rootReducer, composeWithDevTools());
+// 지금 상태에서는 applyMiddleware 와 devtools 를 결합할 수 없네.
+const store = createStore(rootReducer, applyMiddleware(myLogger));
+// const store = createStore(rootReducer, composeWithDevTools());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
