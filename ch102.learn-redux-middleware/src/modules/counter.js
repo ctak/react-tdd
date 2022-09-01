@@ -7,6 +7,16 @@ const DECREASE = 'counter/DECREASE';
 export const increase = () => ({ type: INCREASE });
 export const decrease = () => ({ type: DECREASE });
 
+// thunk 함수만들기
+// action === 'function' 라면 이니까.
+export const increaseAsync = () => (dispatch, getState) => {
+  setTimeout(() => dispatch(increase()), 1000);
+};
+
+export const decreaseAsync = () => dispatch => {
+  setTimeout(() => dispatch(decrease()), 1000);
+};
+
 // initial state
 const initialState = 0;
 
