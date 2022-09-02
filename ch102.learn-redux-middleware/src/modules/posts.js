@@ -1,5 +1,9 @@
 import * as postsAPI from '../api/posts'; // api/posts 안의 함수 모두 불러오기
-import { createPromiseThunk, reducerUtils } from '../lib/asyncUtils';
+import { 
+  createPromiseThunk, 
+  reducerUtils,
+  handleAsyncActions,
+} from '../lib/asyncUtils';
 
 /**
  * 프로미스를 다루는 리덕스 모듈을 다룰 땐 다음과 같은 사항을 고려해야 합니다.
@@ -49,6 +53,10 @@ export const getPost = id => async (dispatch) => {
 */
 export const getPosts = createPromiseThunk(GET_POSTS, postsAPI.getPosts);
 export const getPost = createPromiseThunk(GET_POST, postsAPI.getPostById);
+// 이 방법은 react-router-dom(v6) 에서 사용할 수 없음. { navigate } 를 extraArgument 로 전달할 수 없음.
+export const goToHome = () => (dispatch, getState, { navigate }) => {
+  navigate('/');
+};
 
 const initialState = {
   posts: reducerUtils.initial(),
@@ -58,35 +66,13 @@ const initialState = {
 export default function posts(state = initialState, action) {
   switch (action.type) {
     case GET_POSTS:
-      return {
-        ...state,
-        posts: reducerUtils.loading(),
-      };
     case GET_POSTS_SUCCESS:
-      return {
-        ...state,
-        posts: reducerUtils.success(action.payload),
-      };
     case GET_POSTS_ERROR:
-      return {
-        ...state,
-        posts: reducerUtils.error(action.error), // 그냥 error is true 정도네.
-      };
+      return handleAsyncActions(GET_POSTS, 'posts', true)(state, action);
     case GET_POST:
-      return {
-        ...state,
-        post: reducerUtils.loading(),
-      };
     case GET_POST_SUCCESS:
-      return {
-        ...state,
-        post: reducerUtils.success(action.payload),
-      };
     case GET_POST_ERROR:
-      return {
-        ...state,
-        post: reducerUtils.error(action.error),
-      };
+      return handleAsyncActions(GET_POST, 'post')(state, action);
     default:
       return state;
   }

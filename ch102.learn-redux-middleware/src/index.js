@@ -13,6 +13,16 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 import ReduxThunk from 'redux-thunk';
 
+import { BrowserRouter } from 'react-router-dom';
+
+import { createBrowserHistory } from 'history';
+
+import { useNavigate } from 'react-router-dom';
+
+// const navigate = useNavigate();
+
+// const history = createBrowserHistory();
+
 // 지금 상태에서는 applyMiddleware 와 devtools 를 결합할 수 없네.
 // 이렇게 결합하는 군. middleware 는 계속해서 추가할 수 있겠고,
 // devTools 도 사용할 수 있겠군.
@@ -20,7 +30,12 @@ const store = createStore(
   rootReducer, 
   // 여러개의 미들웨어를 적용 할 수 있습니다.
   // logger 를 사용하는 경우, logger 가 가장 마지막에 와야합니다.
-  composeWithDevTools(applyMiddleware(ReduxThunk, logger))
+  composeWithDevTools(
+    applyMiddleware(
+      ReduxThunk,
+      logger,
+    )
+  )
 );
 // const store = createStore(rootReducer, composeWithDevTools());
 
@@ -31,9 +46,11 @@ const store = createStore(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
