@@ -37,19 +37,19 @@ export const getPostById = async id => {
 }
 */
 
-/* 
- * json-server 
+/*
+ * json-server
  * npx json-server ./data.json --port 4000
  */
 // http://localhost:4000/posts
 // http://localhost:4000/posts/1
 
 export const getPosts = async () => {
-  const response = await axios.get('http://localhost:4000/posts');
+  const response = await axios.get('/posts');
   return response.data;
 }
 
 export const getPostById = async (id) => {
-  const response = await axios.get(`http://localhost:4000/posts/${id}`);
+  const response = await axios.get(`/posts/${id}`);
   return response.data;
 }
