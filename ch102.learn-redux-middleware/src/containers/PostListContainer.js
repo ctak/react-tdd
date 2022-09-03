@@ -15,9 +15,9 @@ function PostListContainer() {
   // 수정한 다음 하면 한 번만 호출되고 말이야.
   // exit 하면서 한 번 호출되는 것일까?
   useEffect(() => {
-    if (data) return;
+    // if (data) return;
     dispatch(getPosts());
-  }, [data, dispatch]); // 여기서 왜 [dispatch] 가 의존성에 걸릴까, dispatch 가 바뀐다는 것은 store 가 바뀐다는 것 아닌가.
+  }, [dispatch]); // 여기서 왜 [dispatch] 가 의존성에 걸릴까, dispatch 가 바뀐다는 것은 store 가 바뀐다는 것 아닌가.
 
   if (loading && !data) return <div>로딩중...</div>;
   if (error) return <div>에러 발생!</div>;
