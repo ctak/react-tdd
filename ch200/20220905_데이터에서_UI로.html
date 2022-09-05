@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <title>From Data to UI</title>
+
+    <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      class Circle extends React.Component {
+        render() {
+          var circleStyle = {
+            padding: 10,
+            margin: 20,
+            display: 'inline-block',
+            backgroundColor: this.props.bgColor,
+            borderRadius: '50%',
+            width: 100,
+            height: 100,
+          }
+
+          return (
+            <div style={circleStyle}>
+            </div>
+          )
+        }
+      }
+
+      const theCircle = <Circle bgColor="#f9c240" />;
+
+      function showCircle() {
+        var colors = ['#393e41', '#e94f37', '#1c89bf', '#a1d363'];
+        var ran = Math.floor(Math.random() * colors.length);
+
+        return <Circle bgColor={colors[ran]} />;
+      }
+
+      var renderData = [];
+      for (var i = 0, n = 8; i < n; i++) {
+        renderData.push(showCircle());
+      }
+
+      ReactDOM.render(
+        <div>
+          {/* theCircle */}
+          {showCircle()}
+          <div>{renderData}</div>
+        </div>,
+        document.querySelector('#root')
+      );
+    </script>
+  </body>
+</html>
