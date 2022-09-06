@@ -11,6 +11,9 @@
 4. 토스트 로 상태 알림
 
 === 20220906
-- 공공데이터 에서 전국약국 가져오기. 
+- 공공데이터 에서 전국약국 가져오기.
   https://www.localdata.go.kr/datafile/each/01_01_06_P_CSV.zip
-  
+
+- JSON server 사용하기
+$ npx json-server ./resources/fulldata_pharmacy_100.json --port 4000
+  * http://localhost:4000/pharmacies/1
