@@ -17,7 +17,7 @@ function PharmacyListContainer() {
   if (!data) return null;
 
   return <>
-    <PharmacyTable />
+    <PharmacyTable pharmacies={data}/>
     <hr />
     <PharmacyList pharmacies={data} />
   </>
