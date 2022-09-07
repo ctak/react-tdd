@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Hello React!</title>
+
+    <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <style>
+      #root {
+        padding: 50px;
+        background-color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      class Counter extends React.Component {
+        render() {
+          var textStyle = {
+            fontSize: 72,
+            fontFamily: 'sans-serif',
+            color: '#333',
+            fontWeight: 'bold',
+          };
+
+          return (
+            <div style={textStyle}>
+              {this.props.display}
+            </div>
+          );
+        }
+      }
+
+      class PlusButton extends React.Component {
+
+        render() {
+          var buttonStyle = {
+            fontSize: '1em',
+            width: 30,
+            height: 30,
+            fontFamily: 'sans-serif',
+            color: '#333',
+            fontWeight: 'bold',
+            lineHeight: '3px',
+          };
+
+          return (
+            <button 
+              style={buttonStyle}
+              onClick={this.props.onClick}
+            >
+              +
+            </button>
+          );
+        }
+      }
+
+      class CounterParent extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            count: 0,
+          };
+          
+          // 이게 참 웃긴 문법이다.
+          // 다시 한 번 풀어보면, this.increase 를 호출한다면 어찌되었던 this 는 함수가 될 것이다. 
+          // 따라서, this.increase 를 .bind(this) 하여 다시 this.increase 에 assign 해야, this.increase 의 this.setState() 가 
+          // 현 Component 에 연결된다.
+          this.increase = this.increase.bind(this);
+        }
+
+        increase(e) {
+          console.log(e.target.tagName); // <BUTTON> 이라고 잘 나온다. 그런데 이건 HTMLElement 인가?
+          let count = this.state.count;
+          count = e.shiftKey ? count + 10 : count + 1;
+          this.setState({
+            count,
+          });
+        }
+
+        render() {
+          var backgroundStyle = {
+            padding: 50, // react 에서는 '50px' 로 쓰지 않네. 그렇게 써도 물론 될 것 같은데, 크기니까 숫자가 맞겠지.
+            backgroundColor: '#ffc53a',
+            width: 250,
+            height: 100,
+            borderRadius: 10,
+            textAlign: 'center',
+          };
+
+          var buttonStyle = {
+            fontSize: '1em',
+            width: 30,
+            height: 30,
+            fontFamily: 'sans-serif',
+            color: '#333',
+            fontWeight: 'bold',
+            lineHeight: '3px',
+          };
+
+          return (
+            <div style={backgroundStyle}>
+              <Counter display={this.state.count} />
+              {/* <button style={buttonStyle} onClick={this.increase}>+</button> */}
+              <PlusButton onClick={this.increase} />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <div>
+          <CounterParent />
+        </div>
+        ,
+        document.querySelector('#root')
+      );
+    </script>
+  </body>
+</html>
