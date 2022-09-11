@@ -18,8 +18,8 @@ function PharmacyListContainer() {
 
   return <>
     <PharmacyTable pharmacies={data}/>
-    <hr />
-    <PharmacyList pharmacies={data} />
+    {/* <hr />
+    <PharmacyList pharmacies={data} /> */}
   </>
 }
 

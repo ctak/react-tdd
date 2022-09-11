@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import BasicTable from './BasicTable';
+import RowSelectionTable from './RowSelectionTable';
 
 function PharmacyTable({ pharmacies }) {
   const columns = useMemo(
@@ -18,7 +19,11 @@ function PharmacyTable({ pharmacies }) {
 
 
   return (
-    <BasicTable
+    // <BasicTable
+    //   columns={columns}
+    //   data={pharmacies}
+    // />
+    <RowSelectionTable
       columns={columns}
       data={pharmacies}
     />
