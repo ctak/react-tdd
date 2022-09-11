@@ -10,7 +10,7 @@ function reducer(state, action) {
 }
 
 export default function useInputs(initialForm) {
-  const [state, dispatch] = useReducer(reducer, initialForm);
+  const [state, dispatch] = useReducer(reducer, initialForm); // 이미 바깥에 있기 때문이군.
   const onChange = e => {
     dispatch(e.target);
   }
