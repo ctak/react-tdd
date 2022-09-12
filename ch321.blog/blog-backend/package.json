@@ -1,0 +1,23 @@
+{
+  "name": "blog-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src",
+    "start:dev": "nodemon --watch src/ src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eslint-config-prettier": "8.5.0",
+    "koa": "2.13.4",
+    "koa-bodyparser": "4.3.0",
+    "koa-router": "12.0.0"
+  },
+  "devDependencies": {
+    "eslint": "8.23.0",
+    "nodemon": "2.0.19"
+  }
+}
