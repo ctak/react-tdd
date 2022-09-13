@@ -1,5 +1,5 @@
-const Router = require('koa-router');
-const posts = require('./posts');
+import Router from 'koa-router';
+import posts from './posts/index.js';
 
 const api = new Router();
 
@@ -13,4 +13,4 @@ api.use('/posts', posts.routes());
 // node.js 의 export
 // module.exports = api; api 라는 객체를 exports 하네.
 // 그렇다면 exports 복수라는 거 아냐. 이건 단수인데.
-module.exports = api;
+export default api;
