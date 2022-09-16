@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 
 import api from './api/index.js';
 import createFakeData from './createFakeData.js';
+import jwtMiddleware from './lib/jwtMiddleware.js';
 
 dotenv.config();
 
@@ -50,8 +51,13 @@ app.use(router.routes()).use(router.allowedMethods());
 // localhost:4000/api/test 가 되는군.
 router.use('/api', api.routes()); // /api 라우트 적용
 
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
 // 라우터 적용 전에 bodyParser 를 적용해야 함.
 app.use(bodyParser());
+app.use(jwtMiddleware);
 
 // app 인스턴스에 라우터 적용
 app.use(router.routes()).use(router.allowedMethods());
