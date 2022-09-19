@@ -4,14 +4,34 @@ import Joi from 'joi';
 
 const { ObjectId } = mongoose.Types;
 
-export const checkObjectId = (ctx, next) => {
+export const getPostById = async (ctx, next) => {
   const { id } = ctx.params;
   if (!ObjectId.isValid(id)) {
     ctx.status = 400; // Bad Request
     return;
   }
-  return next();
+  try {
+    const post = await Post.findById(id);
+    // 포스트가 존재하지 않을 때
+    if (!post) {
+      ctx.status = 404; // Not Found
+      return;
+    }
+    ctx.state.post = post;
+    return next();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
+
+export const checkOwnPost = (ctx, next) => {
+  const { user, post } = ctx.state;
+  if (post.user._id.toString() !== user._id) {
+    ctx.status = 403;
+    return;
+  }
+  return next();
+}
 
 /* 포스트 작성
 POST /api/posts
@@ -47,6 +67,7 @@ export const write = async ctx => {
     title,
     body,
     tags,
+    user: ctx.state.user,
   });
   try {
     await post.save();
@@ -57,7 +78,7 @@ export const write = async ctx => {
 };
 
 /* 포스트 목록 조회
-GET /api/posts
+GET /api/posts?username=&tag=&page=
 */
 // common.js 에서 require 와 module.exports = {} 로 보통 하였는데,
 // 여기서는 export const write, export const list, ... 등등으로 끝내네.
@@ -73,8 +94,15 @@ export const list = async ctx => {
     return;
   }
 
+  // tag, username 값이 유효하면 객체 안에 넣고, 그렇지 않으면 넣지 않음.
+  const { username, tag } = ctx.query;
+  const query = {
+    ...(username ? { 'user.username': username } : {}),
+    ...(tag ? { tags: tag } : {}),
+  };
+
   try {
-    const posts = await Post.find()
+    const posts = await Post.find(query)
       .sort({ _id: -1 })
       // .skip( (page - 1) * size )
       .limit(size)
@@ -82,7 +110,7 @@ export const list = async ctx => {
       .lean()
       .exec(); // find() 함수를 호출한 후에는 exec() 를 붙여 주어야 서버에 쿼리를 요청합니다.
 
-    const postCount = await Post.countDocuments().exec();
+    const postCount = await Post.countDocuments(query).exec();
     ctx.set('Last-Page', Math.ceil(postCount / size));
     ctx.body = posts
       // .map(post => post.toJSON()) // .lean() 함수를 쓰면 처음부터 JSON 형태로 조회할 수 있습니다.
@@ -100,6 +128,7 @@ export const list = async ctx => {
 GET /api/posts/:id
 */
 export const read = async ctx => {
+  /*
   const { id } = ctx.params;
   try {
     const post = await Post.findById(id).exec();
@@ -111,6 +140,8 @@ export const read = async ctx => {
   } catch (e) {
     ctx.throw(500, e);
   }
+  */
+  ctx.body = ctx.state.post; 
 };
 
 /* 특정 포스트 제거
