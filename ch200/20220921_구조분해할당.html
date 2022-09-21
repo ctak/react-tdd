@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Hello React!</title>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <style>
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      // let a, b, z, rest;
+      // ({a, b, z, ...rest} = {a: 10, b: 20, c: 30, d: 40});
+      // console.log(a, b, rest);
+      // console.log(rest);
+      // console.log(z);
+
+      var a, b;
+      [a=5, b=7] = [1];
+      console.log(a, b);
+
+      var a = 1, b = 3;
+      [a, b] = [b, a];
+      console.log(a); // 3
+      console.log(b); // 1
+
+      ////////////////////////////////////////////////////////////////
+
+      function f() {
+        return [1,2,3];
+      }
+
+      [,,] = f(); // 반환 값 모두 무시
+
+      ////////////////////////////////////////////////////////////////
+
+      // var [a, ...b,] = [1, 2, 3]; // 나머지 요소의 오른쪽 뒤에 쉼표가 있으면 SyntaxError 가 발생
+
+      ////////////////////////////////////////////////////////////////
+
+      var a, b;
+      // {a, b} = {a: 1, b: 2}; // 이 방식은 안되네. 가로로 감싸서 해야 함.
+      ({a, b} = {a: 1, b: 2});
+      console.log('a:', a, 'b:', b);
+
+      ////////////////////////////////////////////////////////////////
+      var o = { p: 42, q: true };
+      var {p: foo, q: bar} = o; // 새로운 변수 이름으로 할당하기
+      console.log('foo(p):', foo, 'bar(q):', bar);
+
+      ////////////////////////////////////////////////////////////////
+      // 기본값 갖는 새로운 이름의 변수에 할당하기
+      var { a: aa = 10, b: bb = 5 } = {a: 3};
+
+      console.log(aa, bb); // 3, 5
+
+      ////////////////////////////////////////////////////////////////
+      // 함수 매개변수의 기본값 설정하기
+      function drawES2015Chart({ size = 'big', cords = { x: 0, y: 0 }, radius = 25} = {}) {
+        console.log(size, cords, radius);
+      }
+
+      drawES2015Chart(); // 위 함수에서 ({ ... } = {}) 로 기본값을 설정했기 때문이다.
+      drawES2015Chart({
+        cords: {x: 18, y: 30},
+      });
+
+      /*
+        위의 drawES2015Chart 함수의 원형에서 구조 분해된 좌변에 빈 오브젝트 리터럴을 할당하는 것을 볼 수 있다.
+      */
+
+      ////////////////////////////////////////////////////////////////
+      /* 중첩된 객체 및 배열의 구조 분해 */
+      ////////////////////////////////////////////////////////////////
+      var metadata = {
+        title: "Scratchpad",
+        translations: [
+          {
+            locale: "de",
+            last_edit: "2014-04-14T08:43:37",
+            url: "/de/docs/Tools/Scratchpad",
+            title: "JavaScript-Umgebung",
+          },
+        ],
+        url: "/en-US/docs/Tools/Scratchpad"
+      };
+
+      var { title: englishTitle, translations: [{ title: localeTitle }]} = metadata;
+      console.log(englishTitle); // "Scratchpad"
+      console.log(localeTitle); // "JavaScript-Umgebung"
+      // console.log(translations); 
+      // translations is not defined. 결국 : 이 있는 순간 그 다음으로 바껴진다는 것이네. => 그것은 배열이었고, 첫번째 배열에 있는 객체의, title 을
+      // localeTitle 로 받겠다는 것이네.
+
+      ////////////////////////////////////////////////////////////////
+      // 속성 이름이 유효한 JavaScript 식별자명이 아닌 경우 
+      const foo2 = { 'fizz-buzz': true };
+      const { 'fizz-buzz': fizzBuzz } = foo2;
+      console.log(fizzBuzz);
+
+    </script>
+  </body>
+</html>
