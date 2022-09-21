@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import rootReducer from './modules';
+import rootReducer, { rootSaga } from './modules';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 // import myLogger from './middlewares/myLogger';
@@ -23,6 +23,11 @@ import { useNavigate } from 'react-router-dom';
 
 // const history = createBrowserHistory();
 
+// redux-saga 적용
+import createSagaMiddleware from '@redux-saga/core'; // import 문이 변경되었군.
+const sagaMiddleware = createSagaMiddleware(); // 사가 미들웨어를 만들고,
+
+
 // 지금 상태에서는 applyMiddleware 와 devtools 를 결합할 수 없네.
 // 이렇게 결합하는 군. middleware 는 계속해서 추가할 수 있겠고,
 // devTools 도 사용할 수 있겠군.
@@ -33,10 +38,13 @@ const store = createStore(
   composeWithDevTools(
     applyMiddleware(
       ReduxThunk,
+      sagaMiddleware, // 사가 미들웨어를 적용하고
       logger,
     )
   )
 );
+
+sagaMiddleware.run(rootSaga); // 루트 사가를 실행해 준다. 주의: 스토어 생성이 된 다음에 위 코드를 실행한다.
 // const store = createStore(rootReducer, composeWithDevTools());
 
 // const delay = () => (dispatch, getState) => {
