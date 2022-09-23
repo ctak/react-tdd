@@ -185,6 +185,15 @@ export const createPromiseSagaById = (type, promiseCreator) => {
   }
 }
 
+/*
+const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] = createRequestActionTypes('auth/REGISTER');
+*/
+export const createRequestActionTypes = type => {
+  const SUCCESS = `${type}_SUCCESS`;
+  const FAILURE = `${type}_FAILURE`;
+  return [type, SUCCESS, FAILURE];  
+}
+
 export default function createRequestSaga(type, request) {
   const [SUCCESS, FAILURE] = [`${type}_SUCCESS`, `${type}_FAILURE`];
 
