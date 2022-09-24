@@ -34,7 +34,11 @@ export default handleActions(
       user,
       checkError: null,
     }),
-
+    [CHECK_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      user: null,
+      checkError: error,
+    }),
   },
   initialState,
 );

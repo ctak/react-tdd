@@ -59,8 +59,13 @@ const LoginForm = () => {
   useEffect(() => {
     if (user) {
       navigate('/');
+      try {
+        localStorage.setItem('user', JSON.stringify(user));
+      } catch (e) {
+        console.log('localStorage is not working');
+      }
     }
-  }, [user]);
+  }, [navigate, user]); // navigate 를 써놓지 않으니 use dependency 에러가 발생함.
 
   return (
     <AuthForm
