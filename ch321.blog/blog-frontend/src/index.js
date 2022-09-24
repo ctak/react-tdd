@@ -9,13 +9,30 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from '@redux-saga/core'; // import 문이 변경되었군.
 import rootReducer, { rootSaga } from './modules';
+import { tempSetUser, check } from './modules/user';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
-  rootReducer, 
+  rootReducer,
   composeWithDevTools(applyMiddleware(sagaMiddleware)),
 );
+
+function loadUser() {
+  try {
+    const user = localStorage.getItem('user');
+    console.log('user type => ' + typeof(user)); // user type => string
+    // 사실 바로 다음에 check() 를 하기에 그 때는 객체로 완벽하게 바뀐다.
+    if (!user) return;
+
+    store.dispatch(tempSetUser(user));
+    store.dispatch(check());
+  } catch (e) {
+    console.log('localStorage is not working');
+  }
+}
+
 sagaMiddleware.run(rootSaga);
+loadUser();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
