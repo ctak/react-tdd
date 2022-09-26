@@ -11,6 +11,12 @@ const EditorContainer = () => {
   }));
 
   const onChangeField = useCallback(payload => dispatch(changeField(payload)), [dispatch]);
+  /*
+  const onChangeField = payload => {
+    console.log('here') // 이 때 무한 LOOP 에 빠지는 군. useCallback 을 안 쓰면 말이지.
+    dispatch(changeField(payload))
+  };
+  */
 
   // 언마운트 될 때 초기화
   useEffect(() => {
