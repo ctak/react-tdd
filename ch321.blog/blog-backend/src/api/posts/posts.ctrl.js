@@ -1,8 +1,34 @@
 import Post from '../../models/post.js';
 import mongoose from 'mongoose';
 import Joi from 'joi';
+import sanitizeHtml from 'sanitize-html';
 
 const { ObjectId } = mongoose.Types;
+
+// 참조: https://www.npmjs.com/package/sanitize-html
+const sanitizeOption = {
+  allowedTags: [
+    'h1',
+    'h2',
+    'b',
+    'i',
+    'u',
+    's',
+    'p',
+    'ul',
+    'ol',
+    'li',
+    'blockquote',
+    'a',
+    'img',
+  ],
+  allowedAttributes: {
+    a: ['href', 'name', 'target'],
+    img: ['src'],
+    li: ['class'],
+  },
+  allowedSchemes: ['data', 'http'],
+};
 
 export const getPostById = async (ctx, next) => {
   const { id } = ctx.params;
@@ -35,8 +61,8 @@ export const checkOwnPost = (ctx, next) => {
 
 /* 포스트 작성
 POST /api/posts
-{ 
-  title, 
+{
+  title,
   body,
   tags: ['태그1', '태그2'], // request.body 에서 JSON 으로 array of string 이 온다는 거네.
 } // 이건 request.body 가 이렇게 온다는 것이네.
@@ -61,21 +87,29 @@ export const write = async ctx => {
     ctx.body = result.error;
     return;
   }
-  
+
   const { title, body, tags } = ctx.request.body;
   const post = new Post({
     title,
-    body,
+    body: sanitizeHtml(body, sanitizeOption),
     tags,
     user: ctx.state.user,
   });
   try {
     await post.save();
-    ctx.body = post; 
+    ctx.body = post;
   } catch (e) {
     ctx.throw(500, e); // 에러를 이렇게 던지네.
   }
 };
+
+// html 을 없애고 내용이 너무 길면 200자로 제한하는 함수
+const removeHtmlAndShorten = body => {
+  const filtered = sanitizeHtml(body, {
+    allowedTags: [],
+  });
+  return filtered.length < 200 ? filtered : `${filtered.slice(0, 200)}...`;
+}
 
 /* 포스트 목록 조회
 GET /api/posts?username=&tag=&page=
@@ -117,7 +151,8 @@ export const list = async ctx => {
       .map(post => ({
         ...post,
         body:
-          post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+          // post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`,
+          removeHtmlAndShorten(post.body),
       }))
   } catch (e) {
     ctx.throw(500, e);
@@ -141,7 +176,7 @@ export const read = async ctx => {
     ctx.throw(500, e);
   }
   */
-  ctx.body = ctx.state.post; 
+  ctx.body = ctx.state.post;
 };
 
 /* 특정 포스트 제거
@@ -159,13 +194,13 @@ export const remove = async ctx => {
 
 /* 포스트 수정(특정 필드 변경)
 PATCH /api/posts/:id
-{ 
+{
   title: '수정',
   body: '수정 내용',
   tags: ['수정', '태그']
 }
 */
-// 결국 PUT 을 쓰지 않았던 것은 replace 가 아니였기 때문이다. 어떤 id 를 replace 한다는 것이 DB 의 update 문과 같은가. 아니다. 
+// 결국 PUT 을 쓰지 않았던 것은 replace 가 아니였기 때문이다. 어떤 id 를 replace 한다는 것이 DB 의 update 문과 같은가. 아니다.
 // patch 가 더 맞을 것 같네.
 export const update = async ctx => {
   const { id } = ctx.params;
@@ -189,8 +224,17 @@ export const update = async ctx => {
     return;
   }
 
+  // sanitizeHtml
+  const nextData = { ...ctx.request.body }; // 객체를 복사하고
+  // body 값이 주어졌으면 HTML 필터링
+  if (nextData.body) {
+    // TODO: sanitizeOption 을 쓰지 않았네. 수정 시 <script> 태그가 들어갈 수 있지 않나.
+    nextData.body = sanitizeHtml(nextData.body);
+  }
+
   try {
-    const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+    // const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+    const post = await Post.findByIdAndUpdate(id, nextData, { // 왜 여기에 nextData: { body } 객체를 넣지?
       new: true, // 이 값을 설정하면 업데이트된 데이터를 반환합니다.
       // false 일 때는 업데이트 되기 전의 데이터를 반환합니다. (이럴 경우가 있을까?)
     }).exec();
