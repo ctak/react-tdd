@@ -50,7 +50,7 @@ const Note = () => {
     player.on("loadedmetadata", () => {
       player.log('duration: ' + player.duration());
     });
-  }, []);
+  }, [playerRef]);
 
   // const onTimeUpdate = useCallback((time) = {
   //   setCurrentTime(time);
