@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 import 'videojs-youtube/dist/Youtube.min.js';
@@ -9,7 +9,13 @@ export const VideoJS = (props) => {
   
   const placeholderRef = React.useRef(null);
   const playerRef = React.useRef(null);
-  const { options, onReady } = props;
+  const { 
+    options, 
+    onReady, 
+    phrases, 
+    cursor,
+    isPlay,
+  } = props;
 
   React.useEffect(() => {
     // Make sure Video.js player is only initialized once
@@ -62,6 +68,10 @@ export const VideoJS = (props) => {
       }
     };
   }, [playerRef]);
+
+  React.useEffect(() => {
+    console.log('////////////////////////////////////////////////////////////////');
+  }, [phrases, cursor, isPlay]);
 
   return (
     <>

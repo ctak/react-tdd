@@ -8,6 +8,7 @@
   "duration": 905, // seconds
   "phrases": [
     {
+      "id": "uZOKl6UjwFSz", // nanoid(12)
       "from": 0,
       "to": 10.23, // seconds
     },
