@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { readPost, unloadPost } from '../../modules/post';
 import PostActionButtons from '../../components/post/PostActionButtons';
 import { setOriginalPost } from '../../modules/write';
+import { removePost } from '../../lib/api/posts';
 
 const PostViewerContainer =  () => {
   const navigate = useNavigate();
@@ -32,12 +33,21 @@ const PostViewerContainer =  () => {
     navigate('/write');
   }
 
+  const onRemove = async () => {
+    try {
+      await removePost(postId);
+      navigate('/'); // 홈으로 이동
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <PostViewer
       post={post}
       loading={loading}
       error={error}
-      actionButtons={<PostActionButtons onEdit={onEdit} />}
+      actionButtons={<PostActionButtons onEdit={onEdit} onRemove={onRemove} />}
       ownPost={user && user.id === post && post.id}
     />
   );
