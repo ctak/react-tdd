@@ -3,11 +3,14 @@ import qs from 'qs';
 import { useDispatch, useSelector } from 'react-redux';
 import PostList from '../../components/posts/PostList';
 import { listPosts } from '../../modules/posts'; // LIST_POSTS 의 액션생성함수
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 const PostListContainer = () => {
   const dispatch = useDispatch();
+
   const location = useLocation();
+  const params = useParams();
+
   const { posts, error, loading, user } = useSelector(({ posts, loading, user }) => ({
     posts: posts.posts,
     error: posts.error,
@@ -15,11 +18,12 @@ const PostListContainer = () => {
     user: user.user,
   }));
   useEffect(() => {
-    const { tag, username, page } = qs.parse(location.search, {
+    const { tag, page } = qs.parse(location.search, {
       ignoreQueryPrefix: true,
     });
+    const { username } = params;
     dispatch(listPosts({ tag, username, page }));
-  }, [dispatch, location.search]);
+  }, [dispatch, location.search, params]);
 
   return (
     <PostList
