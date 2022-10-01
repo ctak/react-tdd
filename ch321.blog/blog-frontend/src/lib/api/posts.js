@@ -17,3 +17,11 @@ export const listPosts = ({ page, username, tag }) => {
   });
   return client.get(`/api/posts?${queryString}`);
 };
+
+// 글 업데이트
+export const updatePost = ({ id, title, body, tags }) =>
+  client.patch(`/api/posts/${id}`, {
+    title,
+    body,
+    tags,
+  });

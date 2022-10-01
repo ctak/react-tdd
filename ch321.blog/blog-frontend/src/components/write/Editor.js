@@ -51,9 +51,9 @@ const Editor = ({ title, body, onChangeField }) => {
         ],
       },
     });
-    setTimeout(() => {
-      quillInstance.current.root.innerHTML = '';
-    });
+    // setTimeout(() => {
+    //   quillInstance.current.root.innerHTML = '';
+    // });
 
     // quill 에 text-change 이벤트 핸들러 등록
     // 참고: https://quilljs.com/docs/api/#events
@@ -65,6 +65,22 @@ const Editor = ({ title, body, onChangeField }) => {
     });
 
   }, [onChangeField]); // onChangeField 는 useCallback 을 썼기에 한 번 생성되면 유지되는군.
+
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (mounted.current) return;
+
+    // 작성 시 quill error 대음
+    if (!body) {
+      mounted.current = true;
+      quillInstance.current.root.innerHTML = '';
+      return;
+    }
+
+    // 수정 시 body 에 한 번만 넣기. const mounted = useRef(false) 를 잘 이용해야 함.
+    mounted.current = true;
+    quillInstance.current.root.innerHTML = body;
+  }, [body]);
 
   const onChangeTitle = e => {
     onChangeField({ key: 'title', value: e.target.value });

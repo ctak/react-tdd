@@ -36,13 +36,13 @@ loadUser();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode> // @20221001 Post 수정 시 unmount 가 콜 되는 문제로(store.write 가 초기화 되는) 주석 처리
     <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
