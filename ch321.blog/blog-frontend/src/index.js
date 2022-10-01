@@ -10,6 +10,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from '@redux-saga/core'; // import 문이 변경되었군.
 import rootReducer, { rootSaga } from './modules';
 import { tempSetUser, check } from './modules/user';
+import { HelmetProvider } from 'react-helmet-async';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -39,7 +40,9 @@ root.render(
   // <React.StrictMode> // @20221001 Post 수정 시 unmount 가 콜 되는 문제로(store.write 가 초기화 되는) 주석 처리
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
       </BrowserRouter>
     </Provider>
   // </React.StrictMode>
