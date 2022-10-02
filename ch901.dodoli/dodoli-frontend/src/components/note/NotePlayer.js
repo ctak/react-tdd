@@ -9,7 +9,7 @@ import PhraseList from './PhraseList';
 
 const NoteBlock = styled.div``;
 
-const Note = () => {
+const NotePlayer = () => {
   const playerRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(null);
   const [duration, setDuration] = useState(null);
@@ -238,4 +238,4 @@ const Note = () => {
   );
 }
 
-export default Note;
+export default NotePlayer;

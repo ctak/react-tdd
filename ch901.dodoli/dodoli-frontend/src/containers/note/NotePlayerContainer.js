@@ -1,7 +1,7 @@
 import React from 'react';
-import Note from '../../components/note/Note';
+import NotePlayer from '../../components/note/NotePlayer';
 
-const NoteContainer = () => {
+const NotePlayerContainer = () => {
   const note = {
     source: {
       // src: "https://www.youtube.com/watch?v=UF8uR6Z6KLc",
@@ -12,7 +12,7 @@ const NoteContainer = () => {
     // phrases: [],
   };
 
-  return <Note note={note} />;
+  return <NotePlayer note={note} />;
 };
 
-export default NoteContainer;
+export default NotePlayerContainer;
