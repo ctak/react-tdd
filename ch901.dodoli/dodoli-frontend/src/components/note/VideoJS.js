@@ -6,13 +6,13 @@ import 'videojs-youtube/dist/Youtube.min.js';
 export const VideoJS = (props) => {
   // console.log('VIDEOJS!!!!');
   // const [currentTime, setCurrentTime] = useState(null);
-  
+
   const placeholderRef = React.useRef(null);
   const playerRef = React.useRef(null);
-  const { 
-    options, 
-    onReady, 
-    phrases, 
+  const {
+    options,
+    onReady,
+    phrases,
     cursor,
     isPlay,
   } = props;
@@ -43,9 +43,9 @@ export const VideoJS = (props) => {
         // })
 
         // setTimeout(() => {
-        //   player.muted(false); // 이게 되네. 
+        //   player.muted(false); // 이게 되네.
         // }, 1000);
-        
+
       }));
 
       // You can update player in the `else` block here, for example:
@@ -55,7 +55,7 @@ export const VideoJS = (props) => {
       // player.autoplay(options.autoplay);
       // player.src(options.sources);
     }
-  }, [playerRef]);
+  }, [options, playerRef]);
 
   // Dispose the Video.js player when the functional component unmounts
   React.useEffect(() => {

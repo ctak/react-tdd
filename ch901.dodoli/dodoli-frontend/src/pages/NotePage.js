@@ -1,11 +1,11 @@
 import React from 'react';
 import Responsive from '../components/common/Responsive';
-import Note from '../components/note/Note';
+import NoteContainer from '../containers/note/NoteContainer';
 
 const NotePage = () => {
   return (
     <Responsive>
-      <Note />
+      <NoteContainer />
     </Responsive>
   );
 }
