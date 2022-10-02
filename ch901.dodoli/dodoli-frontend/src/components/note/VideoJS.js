@@ -5,6 +5,10 @@ import 'videojs-youtube/dist/Youtube.min.js';
 
 export const VideoJS = (props) => {
   // console.log('VIDEOJS!!!!');
+  // console.log('VIDEOJS!!!!');
+  // console.log('VIDEOJS!!!!');
+  // console.log('VIDEOJS!!!!');
+  // console.log('VIDEOJS!!!!');
   // const [currentTime, setCurrentTime] = useState(null);
 
   const placeholderRef = React.useRef(null);
@@ -12,12 +16,15 @@ export const VideoJS = (props) => {
   const {
     options,
     onReady,
-    phrases,
-    cursor,
-    isPlay,
   } = props;
 
   React.useEffect(() => {
+    console.log('#1 VIDEOJS!!!!');
+    console.log('#1 VIDEOJS!!!!');
+    console.log('#1 VIDEOJS!!!!');
+    console.log('#1 VIDEOJS!!!!');
+    console.log('#1 VIDEOJS!!!!');
+
     // Make sure Video.js player is only initialized once
     if (!playerRef.current) {
       const placeholderEl = placeholderRef.current;
@@ -55,10 +62,16 @@ export const VideoJS = (props) => {
       // player.autoplay(options.autoplay);
       // player.src(options.sources);
     }
-  }, [options, playerRef]);
+  }, [options, onReady]);
 
   // Dispose the Video.js player when the functional component unmounts
   React.useEffect(() => {
+    console.log('#2 VIDEOJS!!!!');
+    console.log('#2 VIDEOJS!!!!');
+    console.log('#2 VIDEOJS!!!!');
+    console.log('#2 VIDEOJS!!!!');
+    console.log('#2 VIDEOJS!!!!');
+
     const player = playerRef.current;
 
     return () => {
@@ -68,10 +81,6 @@ export const VideoJS = (props) => {
       }
     };
   }, [playerRef]);
-
-  React.useEffect(() => {
-    console.log('////////////////////////////////////////////////////////////////');
-  }, [phrases, cursor, isPlay]);
 
   return (
     <>

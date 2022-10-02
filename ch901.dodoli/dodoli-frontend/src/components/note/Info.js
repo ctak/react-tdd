@@ -17,7 +17,7 @@ const Duration = styled.div`
 
 const Info = ({currentTime, duration}) => (
   <InfoBlock>
-    <CurrentTime>{currentTime}</CurrentTime>
+    <CurrentTime>{currentTime && currentTime.toFixed(2)}</CurrentTime>
     <Duration>{duration}</Duration>
   </InfoBlock>
 );

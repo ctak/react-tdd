@@ -17,7 +17,7 @@ const NotePlayer = () => {
   // const [cursor, setCursor] = useState(0);
   // const [isPlay, togglePlay] = useState(false);
   const cursor = useRef(0);
-  const isPlay = useRef(false);
+  // const isPlay = useRef(false);
   const looped = useRef(0);
   const toTime = useRef(null);
 
@@ -199,12 +199,12 @@ const NotePlayer = () => {
   }, [phrases, playPhrase]);
 
   useEffect(() => {
-    console.log('currentTime: ', currentTime, ', toTime: ', toTime.current);
+    console.log('currentTime: ', currentTime && currentTime.toFixed(2), ', toTime: ', toTime.current);
     const player = playerRef.current;
     if (player && player.dodoli) {
       // player.dodoli = false;
       // console.log('paused(): ', player.paused());
-      console.log('loopd: ', looped.current);
+      // console.log('loopd: ', looped.current);
       // console.log('phrases: ', phrases);
 
       if (currentTime >= toTime.current) {
@@ -222,9 +222,6 @@ const NotePlayer = () => {
       <VideoJS
         options={videoJsOptions}
         onReady={onReady}
-        phrases={phrases}
-        cursor={cursor}
-        isPlay={isPlay}
       />
       <Info
         currentTime={currentTime}

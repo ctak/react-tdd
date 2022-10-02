@@ -9,7 +9,7 @@ const PhraseListBlock = styled.div`
 const PhraseBlock = styled.div`
 `;
 
-const Phrase = ({phrase: {id, from, to}}) => {
+const Phrase = ({ phrase: {id, from, to} }) => {
   return (
     <PhraseBlock>
       <span>{id} </span>
