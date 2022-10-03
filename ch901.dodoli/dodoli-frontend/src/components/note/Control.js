@@ -7,21 +7,48 @@ const ControlBlock = styled.div`
   padding-bottom: 1rem;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
-const MarkButton = styled(Button)`
+const StyledButton = styled(Button)`
   padding: 1rem 2rem;
+
+  & + & {
+    margin-left: 0.5rem;
+  }
 `
 
-const Control = ({onMark}) => {
+const LeftButtons = styled.div``;
+
+const RightButtons = styled.div``;
+
+const Control = ({ onMark, onNext, onPrev, paused, onPlay }) => {
   return (
     <ControlBlock>
-      <MarkButton
-        onClick={() => onMark()}
-      >
-        MARK
-      </MarkButton>
+      <LeftButtons>
+        <StyledButton
+          onClick={() => onPrev()}
+        >
+          PREV
+        </StyledButton>
+        <StyledButton
+          onClick={() => onPlay()}
+        >
+          { paused ? 'PLAY' : 'PAUSE' }
+        </StyledButton>
+        <StyledButton
+          onClick={() => onNext()}
+        >
+          NEXT
+        </StyledButton>
+      </LeftButtons>
+      <RightButtons>
+        <StyledButton
+          onClick={() => onMark()}
+        >
+          MARK
+        </StyledButton>
+      </RightButtons>
     </ControlBlock>
   );
 }

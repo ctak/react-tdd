@@ -1,5 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import palette from "../../lib/styles/palette";
 
 const PhraseListBlock = styled.div`
   height: 100px;
@@ -7,12 +8,23 @@ const PhraseListBlock = styled.div`
 `;
 
 const PhraseBlock = styled.div`
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  // background: ${props => (props.cursor ? `${palette.cyan[2]}` : 'white')};
+
+  ${props =>
+    props.cursor &&
+    css`
+      background: ${palette.cyan[2]};
+    `}
+
 `;
 
-const Phrase = ({ phrase: {id, from, to} }) => {
+const Phrase = ({ phrase: {id, from, to}, cursor }) => {
   return (
-    <PhraseBlock>
-      <span>{id} </span>
+    <PhraseBlock cursor={cursor}>
+      {/* <span>{id} </span> */}
       <span>{from}</span>
       <span> ~ </span>
       <span>{to}</span>
@@ -20,11 +32,15 @@ const Phrase = ({ phrase: {id, from, to} }) => {
   );
 }
 
-const PhraseList = ({phrases}) => {
+const PhraseList = ({ phrases, cursor }) => {
   return (
     <PhraseListBlock>
-      {phrases.map(phrase => (
-        <Phrase key={phrase.id} phrase={phrase} />
+      {phrases.map((phrase, index) => (
+        <Phrase
+          key={phrase.id}
+          phrase={phrase}
+          cursor={index === cursor ? 1 : 0}
+        />
       ))}
     </PhraseListBlock>
   )

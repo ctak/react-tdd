@@ -24,6 +24,7 @@ export const VideoJS = (props) => {
     console.log('#1 VIDEOJS!!!!');
     console.log('#1 VIDEOJS!!!!');
     console.log('#1 VIDEOJS!!!!');
+    // [...Array(5).keys()].forEach(() => console.log('#1 VIDEOJS!!!!'));
 
     // Make sure Video.js player is only initialized once
     if (!playerRef.current) {
