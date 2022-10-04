@@ -9,6 +9,12 @@ import PhraseList from './PhraseList';
 
 const NoteBlock = styled.div``;
 
+function totalLoopOfPhrase (phrases, cursor) {
+  console.log('totalLoopOfPhrase!!!');
+  if (phrases.length === 0) return;
+  return phrases[cursor].loop;
+}
+
 const NotePlayer = ({ note }) => {
   const playerRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(null);
@@ -165,7 +171,7 @@ const NotePlayer = ({ note }) => {
   }, [phrases]);
 
   useEffect(() => {
-    console.log('currentTime: ', currentTime && currentTime.toFixed(2), ', toTime: ', toTime.current);
+    // console.log('currentTime: ', currentTime && currentTime.toFixed(2), ', toTime: ', toTime.current);
     const player = playerRef.current;
 
     if (player && player.dodoli) {
@@ -346,6 +352,9 @@ const NotePlayer = ({ note }) => {
   // }, [phrases]);
   // }
 
+  // const totalLoop = totalLoopOfPhrase(phrases, cursor);
+  const totalLoop = useMemo(() => totalLoopOfPhrase(phrases, cursor), [phrases, cursor]);
+
   return (
     <NoteBlock>
       <VideoJS
@@ -355,6 +364,8 @@ const NotePlayer = ({ note }) => {
       <Info
         currentTime={currentTime}
         duration={duration}
+        count={looped.current}
+        total={totalLoop}
       />
       <Control
         onMark={onMark}

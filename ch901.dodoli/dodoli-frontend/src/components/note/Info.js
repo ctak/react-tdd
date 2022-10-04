@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Counter from './Counter';
 
 const InfoBlock = styled.div`
   padding-top: 1rem;
@@ -10,14 +11,19 @@ const InfoBlock = styled.div`
 `;
 const CurrentTime = styled.div`
   padding: 0.25rem 1rem;
+  width: 120px;
+  text-align: left;
 `;
 const Duration = styled.div`
   padding: 0.25rem 1rem;
+  width: 120px;
+  text-align: right;
 `;
 
-const Info = ({currentTime, duration}) => (
+const Info = ({currentTime, duration, total, count}) => (
   <InfoBlock>
     <CurrentTime>{currentTime && currentTime.toFixed(2)}</CurrentTime>
+      <Counter total={total} count={count} />
     <Duration>{duration}</Duration>
   </InfoBlock>
 );
