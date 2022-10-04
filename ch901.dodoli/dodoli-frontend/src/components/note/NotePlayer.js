@@ -16,14 +16,12 @@ const NotePlayer = ({ note }) => {
   const [phrases, setPhrases] = useState([]);
   const [cursor, setCursor] = useState(0);
   const [paused, setPaused] = useState(true);
-  const [seekedTime, setSeekedTime] = useState(null);
-  // const [isPlay, togglePlay] = useState(false);
-  // const cursor = useRef(0);
-  // const isPlay = useRef(false);
+  
   const looped = useRef(0); // 각각의 control 에서 설정해야 함.
+
   const toTime = useRef(null); // playPhrase() 에서 설정.
   const fromTime = useRef(null);
-
+  
   const timeoutID = useRef(undefined); // 각각의 control 에서 Clear 해야 함.
 
   const videoJsOptions = useMemo(() => ({
@@ -45,12 +43,8 @@ const NotePlayer = ({ note }) => {
   }), [note]);
 
   const onReady = useCallback((player) => {
-    console.log('USECALLBACK!!!!');
-    // console.log(player);
+    console.log('onReady!!!!');
     playerRef.current = player;
-
-    // setTimeout(() => player.muted(false), 1000 * 3);
-    // player.muted(false);
 
     // You can handle player events here, for example:
     player.on('waiting', () => {
@@ -68,23 +62,16 @@ const NotePlayer = ({ note }) => {
     player.on("timeupdate", () => {
       const curTime = player.currentTime();
       setCurrentTime(curTime);
-      // console.log(curTime, ' vs ', currentTime, ' vs ', toTime.current);
-      // if (player.dodoli && curTime >= toTime.current) {
-      //   console.log('#0');
-      //   player.pause();
-      //   onSetCurrentTime();
-      // }
     });
 
     player.on("loadedmetadata", () => {
       player.log('duration: ' + player.duration());
       setDuration(player.duration());
-      player.log('name: ', player.name());
+      // player.log('name: ', player.name()); // 아무것도 나오지 않음.
     });
 
     player.on("seeked", (e) => {
       player.log('player is seeked.');
-      setSeekedTime(player.currentTime());
     });
 
     player.on("seeking", (e) => {
@@ -92,19 +79,10 @@ const NotePlayer = ({ note }) => {
     })
   }, [playerRef]);
 
-
-  // const onTimeUpdate = useCallback((time) = {
-  //   setCurrentTime(time);
-  // }, [setCurrentTime]);
-
-
   const playPhrase = useCallback(async (plus = true) => {
     console.log('!!!!!!!! [playPhrase] start...');
-    console.log('phrases: ', phrases);
+    // console.log('phrases: ', phrases);
     const player = playerRef.current;
-    // if (!player.dodoli) {
-    //   player.dodoli = true;
-    // }
 
     const { from, to, loop } = phrases[cursor];
     // console.log('typeof(to):', typeof(to)); // number
@@ -125,27 +103,16 @@ const NotePlayer = ({ note }) => {
     fromTime.current = from;
     toTime.current = to;
 
-    // player.on("timeupdate", () => {
-    //   console.log('timeupdate');
-    //   if (player.currentTime() > to) {
-    //     player.pause();
-    //   }
-    // });
-
-    // setCurrentTime(from);
-    // player.pause();
-    console.log('before paused', player.paused());
-
     player.currentTime(from);
     setCurrentTime(from);
+
     // player.play().then(() => {
     //   console.log('paused', player.paused());
     //   player.dodoli = true;
     // })
-
     // player.dodoli = false;
+
     await player.play();
-    console.log('after paused', player.paused());
     player.dodoli = true;
 
     console.log(`LOOPING: ${loop} > ${looped.current}`);
@@ -156,23 +123,7 @@ const NotePlayer = ({ note }) => {
     //   }, 1000);
     // }
   }, [playerRef, phrases, cursor]);
-
-  // const onSetCurrentTime = useCallback(() => {
-  //   console.log(phrases);
-  //   console.log(cursor.current);
-  //   if (phrases.length === 0) return;
-  //   const { loop } = phrases[cursor.current];
-  //   if (loop < looped.current) {
-  //     setTimeout(() => {
-  //       playPhrase();
-  //     }, 1000);
-  //   }
-
-  // }, [phrases, playPhrase]);
-
-
-
-
+  
   useEffect(() => {
     console.log(nanoid(12));
     return () => {
@@ -200,18 +151,41 @@ const NotePlayer = ({ note }) => {
   // }, [phrases, ]); // 이 방식은 playPhrase 를 따로 실행해야 할 때.
   }, [phrases, playPhrase]);
 
+  const onSeeked = useCallback((currentTime) => {
+    console.log('ON SEEKED!!!!')
+
+    const idx = phrases.findIndex(phrase => {
+      return (
+        phrase.from <= currentTime &&
+        currentTime <= phrase.to
+      );
+    });
+
+    setCursor(cursor => idx);
+  }, [phrases]);
+
   useEffect(() => {
     console.log('currentTime: ', currentTime && currentTime.toFixed(2), ', toTime: ', toTime.current);
     const player = playerRef.current;
+
     if (player && player.dodoli) {
-      // player.dodoli = false;
-      // console.log('paused(): ', player.paused());
-      // console.log('loopd: ', looped.current);
-      // console.log('phrases: ', phrases);
+      // seeked 체크
+      if (currentTime < (fromTime.current - 1) || currentTime > (toTime.current + 1)) {
+        console.log('SEEKED!!!!')
+        console.log('seeking:', player.seeking());
+        if (player.seeking()) return;
+
+        setTimeout(() => {
+          player.pause();
+          _clear();
+          onSeeked(currentTime);
+        }, 0)
+
+        return;
+      }
 
       if (currentTime >= toTime.current) {
-        if (player.seeking()) return;
-        console.log('여기서 seek 계산을 해야 하나. userActive():', player.userActive());
+        // console.log('여기서 seek 계산을 해야 하나. userActive():', player.userActive());
         player.dodoli = false; // 이게 핵심이었군!!!!
         player.pause();
         timeoutID.current = setTimeout(() => {
@@ -220,34 +194,6 @@ const NotePlayer = ({ note }) => {
       }
     }
   }, [currentTime, playPhrase]);
-
-  useEffect(() => {
-    console.log('#### seekedTime:', seekedTime, ', fromTime:', fromTime.current, ', toTime:', toTime.current);
-    const player = playerRef.current;
-    if (player && typeof fromTime.current === 'number') {
-    // 위의 currentTime 과 혼선은 있지만 _clear() 할 수 있으니까.
-      if (seekedTime < fromTime.current || seekedTime > toTime.current) {
-        console.log('SEEKED!!!!')
-        console.log('SEEKED!!!!')
-        console.log('SEEKED!!!!')
-        // player.pause();
-        // _clear();
-
-        const idx = phrases.findIndex(phrase => {
-          return (
-            phrase.from <= seekedTime &&
-            seekedTime <= phrase.to
-          );
-        });
-
-        // setCursor(cursor => idx);
-
-        // setSeekedTime(null);
-      }
-
-    }
-
-  }, [seekedTime, phrases]);
 
   /****************************************************************/
   // Handlers
@@ -264,7 +210,7 @@ const NotePlayer = ({ note }) => {
     player && (player.dodoli = false);
   }
 
-  const mark = () => {
+  const mark = useCallback(() => {
     console.log('[mark] start...');
     // const player = playerRef.current;
     const ps = [...phrases];
@@ -307,7 +253,7 @@ const NotePlayer = ({ note }) => {
     console.log('[mark] end.')
     // cursor 는 항상
     // playPhrase(); // mark 에서는 playPhrase() 가 여기 있으면 안됨.
-  }
+  });
 
   const next = () => {
     console.log('[next] start...');
