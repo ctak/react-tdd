@@ -22,12 +22,12 @@ const NotePlayer = ({ note }) => {
   const [phrases, setPhrases] = useState([]);
   const [cursor, setCursor] = useState(0);
   const [paused, setPaused] = useState(true);
-  
+
   const looped = useRef(0); // 각각의 control 에서 설정해야 함.
 
   const toTime = useRef(null); // playPhrase() 에서 설정.
   const fromTime = useRef(null);
-  
+
   const timeoutID = useRef(undefined); // 각각의 control 에서 Clear 해야 함.
 
   const videoJsOptions = useMemo(() => ({
@@ -129,7 +129,7 @@ const NotePlayer = ({ note }) => {
     //   }, 1000);
     // }
   }, [playerRef, phrases, cursor]);
-  
+
   useEffect(() => {
     console.log(nanoid(12));
     return () => {
@@ -329,6 +329,19 @@ const NotePlayer = ({ note }) => {
     }
   }, [paused, playPhrase, phrases, cursor]);
 
+  const onClickPhrase = useCallback((phraseId) => {
+    const player = playerRef.current;
+    if (!phraseId) return;
+    player.pause();
+    _clear();
+    const idx = phrases.findIndex(phrase => {
+      return (
+        phrase.id === phraseId
+      );
+    });
+    setCursor(cursor => idx);
+  }, [phrases]);
+
   // const onSeeked = useCallback(() => {
   // // const onSeeked = () => {
   //   console.log('@@@@ ON SEEKED');
@@ -377,6 +390,7 @@ const NotePlayer = ({ note }) => {
       <PhraseList
         phrases={phrases}
         cursor={cursor}
+        onClickPhrase={onClickPhrase}
       />
     </NoteBlock>
   );
