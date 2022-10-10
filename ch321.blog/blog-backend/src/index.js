@@ -66,14 +66,25 @@ app.use(jwtMiddleware);
 app.use(router.routes()).use(router.allowedMethods());
 
 // koa-static 적용
+// 20221010 koa-static 으로 여러개의 frontend 를 serve 하는 것은 찾지 못했음.
+// TODO: koa-mount 로 여러개의 koa 를 사용할 수는 있음.
+// koa-static 을 다시 생각해 보면,
+// 1. 현재 폴더에 있지 않는 디렉토리를 serve 하는 것이고,
+// 2. web-base-url 에서 refresh 가 될 때, 아래의 ctx 가 필요할 것이고,
+// 3. index.html 에서 다른 url 을 불러오게 되면, 해당 file 을 또 찾을 수 없게 되어
+// 4. 또 index.html 을 불러야 하고 등등이네..
+// 5. 지금 url 을 맘대로 적을 때 404 가 타지 못하는 부분이 발생한 것이네
 const __dirname = path.resolve();
 const buildDirectory = path.resolve(__dirname, '../blog-frontend/build/');
+console.log(buildDirectory);
 app.use(serve(buildDirectory));
 app.use(async ctx => {
   // Not Found 이고, 주소가 /api로 시작하지 않는 경우
   if (ctx.status === 404 && ctx.path.indexOf('/api') !== 0) {
+    console.log('HEREHEREHRE')
+  // if (ctx.status === 404 && ctx.path.indexOf('/blog/') === 0) { // 이렇게는 의미 없고.
     // index.html 내용을 반환
-    await send(ctx, 'index.html', { root: buildDirectory });
+    await send(ctx, 'index.html', { root: buildDirectory }); // 이 문장은 웹브라우저가 Refresh 되었을 때 의미가 있다.
   }
 });
 
