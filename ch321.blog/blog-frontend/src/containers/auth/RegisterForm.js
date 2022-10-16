@@ -41,8 +41,8 @@ const RegisterForm = () => {
     }
     if (password !== passwordConfirm) {
       setError('비밀번호가 일치하지 않습니다.');
-      changeField({ form: 'register', key: 'password', value: ''});
-      changeField({ form: 'register', key: 'passwordConfirm', value: ''});
+      dispatch(changeField({ form: 'register', key: 'password', value: ''}));
+      dispatch(changeField({ form: 'register', key: 'passwordConfirm', value: ''}));
       return;
     }
     dispatch(

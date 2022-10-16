@@ -11,6 +11,20 @@ const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] = createRequestActionTypes(
 
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes('auth/LOGIN');
 
+/*
+  // 인풋 변경 이벤트 핸들러
+  // redux 의 상태를 바꾼다.
+  const onChange = e => {
+    const { name, value } = e.target;
+    dispatch(
+      changeField({
+        form: 'login',
+        key: name,
+        value
+      })
+    );
+  };
+*/
 export const changeField = createAction(
   CHANGE_FIELD,
   ({ form, key, value }) => ({
@@ -67,6 +81,7 @@ const auth = handleActions(
     [INITIALIZE_FORM]: (state, { payload: form }) => ({
       ...state,
       [form]: initialState[form],
+      authError: null, // 폼 전환 시 회원 인증 에러 초기화
     }),
     // 회원가입 성공
     [REGISTER_SUCCESS]: (state, { payload: auth }) => ({

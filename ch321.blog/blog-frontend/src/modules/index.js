@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   posts,
 });
 
+// 리덕스 모듈을 작성했다면 프로젝트의 rootSaga 를 만들어 주세요.
 export function* rootSaga() {
   yield all([authSaga(), userSaga(), writeSaga(), postSaga(), postsSaga()]);
 }
