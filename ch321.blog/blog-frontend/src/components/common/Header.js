@@ -32,6 +32,10 @@ const Wrapper = styled(Responsive)`
 
 /**
  * 헤더가 fixed 로 되어 있기 때문에 페이지의 콘텐츠가 4rem 아래에 나타나도록 해 주는 컴포넌트
+ * <HeaderBlock/> 과 동일 레벨에 있다는 것.
+ * <HeaderBlock>
+ * </HeaderBlock>
+ * <Spacer />
  */
 const Spacer = styled.div`
   height: 4rem;

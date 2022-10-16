@@ -52,8 +52,9 @@ const StyledLink = styled(Link)`
 
 const Button = props => {
   return props.to ? (
-    // <StyledLink {...props} cyan={props.cyan ? 1 : 0} />
-    <StyledLink {...props} />
+    <StyledLink {...props} cyan={props.cyan ? 1 : 0} />
+    // react_devtools_backend.js:4026 Warning: Received `true` for a non-boolean attribute `cyan`.
+    // <StyledLink {...props} />
   ) : (
     <StyledButton {...props} />
   )
