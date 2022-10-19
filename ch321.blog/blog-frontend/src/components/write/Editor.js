@@ -6,6 +6,7 @@ import palette from '../../lib/styles/palette';
 import Responsive from '../common/Responsive';
 
 const EditorBlock = styled(Responsive)`
+  /* 페이지 위아래 여백 지정 */
   padding-top: 5rem;
   padding-bottom: 5rem;
 `;
