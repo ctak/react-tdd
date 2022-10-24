@@ -25,7 +25,7 @@ function PharmacyTable({ pharmacies }) {
     // />
     <RowSelectionTable
       columns={columns}
-      data={pharmacies}
+      data={pharmacies.slice(0, 20)}
     />
   );
 }

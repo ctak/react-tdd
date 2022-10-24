@@ -1,6 +1,10 @@
 // CodeSandbox 에 있는 예제가 forwardRef 에러가 발생하였음.
 // https://codesandbox.io/s/github/tanstack/table/tree/main/examples/react/row-selection
 // tanstack 을 보면서 만듦.
+// https://react-table-v7.tanstack.com/docs/api/useRowSelect
+// https://codesandbox.io/s/react-table-click-on-row-646ug?file=/src/App.js // onClick 설명.
+// https://www.daleseo.com/react-table/
+
 import React from 'react';
 import Styled from 'styled-components';
 import { useRowSelect, useTable } from 'react-table'
