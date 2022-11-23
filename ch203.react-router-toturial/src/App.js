@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import Contact from "./pages/Contact";
+// import ErrorPage from "./pages/ErrrorPage";
+import NotFound from "./pages/NotFound";
+import Root from "./pages/Root";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route 
+        path="/" 
+        element={<Root />}
+        // errorElement={<ErrorPage />} // 결론은 이렇게 tutorial 처럼 나올 수 없다는 것.
+      >
+      </Route>
+      <Route path="/contacts/:contactId" element={<Contact />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
