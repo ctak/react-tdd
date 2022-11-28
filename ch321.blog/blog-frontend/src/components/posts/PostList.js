@@ -27,7 +27,7 @@ const PostItemBlock = styled.div`
     padding-top: 0;
   }
   &+& {
-    border-top: 1px solid #{palette.gray[6]};
+    border-top: 1px solid ${palette.gray[4]};
   }
 
   h2 {
