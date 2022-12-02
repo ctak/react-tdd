@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from 'axios';
 import NewsItem from "./NewsItem";
+import usePromise from "../lib/usePromise";
+import { AxiosError } from "../../node_modules/axios/index";
 
 const NewsListBlock = styled.div`
   box-sizing: border-box;
@@ -16,7 +18,8 @@ const NewsListBlock = styled.div`
   }
 `;
 
-const NewsList = () => {
+const NewsList = ({ category }) => {
+  /*
   const [articles, setArticles] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -25,8 +28,14 @@ const NewsList = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const query = category === 'all' ? '' : `&category=${category}`;
+        // let newsUrl = 'https://newsapi.org/v2/top-headlines?country=kr&apiKey=abfba8f2d88e46b7916e5c5685c9bd34';
+        // if (category !== 'all') {
+        //   newsUrl += `&category=${category}`
+        // }
         // const response = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
-        const response = await axios.get('https://newsapi.org/v2/top-headlines?country=kr&apiKey=abfba8f2d88e46b7916e5c5685c9bd34');
+        const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=abfba8f2d88e46b7916e5c5685c9bd34`);
+        // const response = await axios.get(newsUrl);
         setArticles(response.data.articles);
       } catch (e) {
         console.log(e);
@@ -35,8 +44,16 @@ const NewsList = () => {
     };
 
     fetchData();
-  }, []);
+  }, [category]);
+  */
+  const [loading, response, error] = usePromise(() => {
+    const query = category === 'all' ? '' : `&category=${category}`;
+    return axios.get(`https://newsapi.org/v2/top-headlines?country=kr${query}&apiKey=abfba8f2d88e46b7916e5c5685c9bd34`);
+  }, [category]);
 
+  if (error) {
+    return <NewsListBlock>에러 발생!</NewsListBlock>;
+  }
   // 대기 중일 때
   // useEffect 문이 없다면 여기로 들어올 수가 없군. 여기서 ajax 를 돌릴 때 나와야 하기에.
   if (loading) {
@@ -44,9 +61,11 @@ const NewsList = () => {
   }
 
   // 아직 articles 값이 설정되지 않았을 때
-  if (!articles) {
+  if (!response) {
     return null;
   }
+
+  const { articles } = response.data;
 
   return (
     <NewsListBlock>
