@@ -70,9 +70,10 @@ function App() {
     // cards[1].push(...fillCard(max * 3, chars1));
     // cards[2].push(...fillCard(max * 3, chars2));
     // console.log('card2:', cards[2]);
-    setCards0(prev => fillCard(max * 3, chars0));
-    setCards1(prev => fillCard(max * 3, chars1));
-    setCards2(prev => fillCard(max * 3, chars2));
+    const salt = 3;
+    setCards0(prev => fillCard(max * salt, chars0));
+    setCards1(prev => fillCard(max * salt, chars1));
+    setCards2(prev => fillCard(max * salt, chars2));
   }, [names]);
 
   const handleClick = useCallback(() => {

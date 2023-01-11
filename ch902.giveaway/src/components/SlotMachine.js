@@ -7,29 +7,32 @@ import styled from 'styled-components';
 
 // 🧧 🥉 🥉 🥉
 const SlotMachineBlock = styled.div`
-  background: #1a2b45;
+  background: #35654d;
   padding: 3rem;
+  overflow: hidden;
 
   .doors {
     display: inline-flex;
-    border: 1px solid red;
+    // border: 1px solid red;
   }
 
   .door {
     background: #fafafa;
     width: 100px;
     height: 110px;
-    // overflow: hidden;
+    overflow: hidden;
     border-radius: 5px;
     margin: 5px;
   }
 
   .boxes {
     transition: transform 1s ease-in-out;
+    // transition: transform 1s ease-out;
+    // transition: transform 1s cubic-bezier(.2,.12,0,.99)
   }
 
   .box {
-    border: 1px solid blue;
+    // border: 1px solid blue;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,7 +95,8 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto }) => {
       const boxes = door.querySelector('.boxes');
       const boxesClone = boxes.cloneNode(false);
       //const pool = ['❓'];
-      pools[idx] = ['❓'];
+      // pools[idx] = ['❓'];
+      pools[idx] = ['🧧'];
 
       if (!firstInit) {
          // console.log('firstInit is false');
@@ -145,7 +149,8 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto }) => {
     console.log('spin...');
     const doors = elRef.current.querySelectorAll('.door');
     // setTarget();
-    init(false, 1, 2);
+    // init(false, 1, 2);
+    init(false);
 
     for (const door of doors) {
       const boxes = door.querySelector('.boxes');
