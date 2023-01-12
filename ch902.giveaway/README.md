@@ -1,6 +1,7 @@
 # TODOS
 ## [아직도] 만들기
 ## const queen = '홍길동,2'
+  - localStorage.setItem('queen', '탁창범,1')
 ## 디자인 freepic
   - https://www.freepik.com/search?format=search&page=4&query=slot+machine&selection=1&type=vector
 

@@ -40,6 +40,11 @@ const BoardBlock = styled.div`
 
 `;
 
+const CAPA_1 = 1;
+const CAPA_2 = 5;
+const CAPA_3 = 10;
+const CAPA_4 = 20;
+
 const Lotto = () => {
   const [ranking, setRanking] = useState(4);
   const [lots, setLots] = useState([...Array(20).keys()]);
@@ -59,6 +64,8 @@ const Lotto = () => {
   const [isVisible, setVisible] = useState(false); // 아래 결과 Board.
 
   const rosterRef = useRef(null);
+  const queenRef = useRef(null);
+  const queenRankRef = useRef(null);
 
   const onToggleBoard = useCallback(() => {
     // e.preventDefault();
@@ -71,6 +78,16 @@ const Lotto = () => {
     const list = [...roster.split(',')];
     console.log('!!!! roster.length => ' + list.length);
     rosterRef.current = list;
+    //
+    try {
+      const queen = localStorage.getItem('queen');
+      if (queen) {
+        [queenRef.current, queenRankRef.current] = queen.split(',');
+      }
+      console.log(`queen:<${queenRef.current},${queenRankRef.current}>`);
+    } catch (e) {
+      console.log('localStorage is not working');
+    }
     return list;
   }, []);
 
@@ -88,6 +105,36 @@ const Lotto = () => {
   // const target = [];
 
   const setTarget = useCallback(() => {
+    //
+    function _shuffle(roster, ranking) {
+      let shuffled = shuffle(shuffle(roster));
+      console.log('>>>> shuffled: ', shuffled.join(','));
+      const idx = ranking === 4 ? CAPA_4
+        : ranking === 3 ? CAPA_3
+        : ranking === 2 ? CAPA_2
+        : CAPA_1;
+
+      const queenRank = queenRankRef.current ? parseInt(queenRankRef.current, 10) : null;
+      if (queenRank === ranking) {
+        for (let i = 1; i < 100; i++) {
+          if (shuffled.slice(0, idx).includes(queenRef.current)) {
+            break;
+          }
+          shuffled = shuffle(shuffle(roster));
+          console.log(`>>>> shuffled #1: ${i}:`, shuffled.join(','));
+        }
+      } else if (queenRank !== ranking) {
+        for (let i = 1; i < 100; i++) {
+          if (! shuffled.slice(0, idx).includes(queenRef.current)) {
+            break;
+          }
+          shuffled = shuffle(shuffle(roster));
+          console.log(`>>>> shuffled #2: ${i}:`, shuffled.join(','));
+        }
+      }
+      return shuffled;
+    }
+    //
     console.log('!!!! setTarget');
     // target.length = 0;
     // const targetIdx = Math.floor(Math.random() * names.length);
@@ -100,12 +147,16 @@ const Lotto = () => {
     const roster = rosterRef.current;
     console.log('roster.length:', roster.length);
     console.log('roster: ', roster.join(','));
-    const roster2 = shuffle(shuffle(roster));
+    //
+    // roster2 는 셔플한 결과이고 이 중 앞부분을 잘라 선택을 한다.
+    //
+    // const roster2 = shuffle(shuffle(roster));
+    const roster2 = _shuffle(roster, ranking);
     console.log('roster2: ', roster2.join(','));
 
     let lottos;
     if (ranking === 4) {
-      const len = 20;
+      const len = CAPA_4;
       lottos = roster2.splice(0, len);
       console.log('4.lottos: ', lottos.join(','));
       if (lottos.length < len) {
@@ -115,7 +166,7 @@ const Lotto = () => {
       setRank4(prev => lottos);
       setLots(prev => lottos);
     } else if (ranking === 3) {
-      const len = 10;
+      const len = CAPA_3;
       lottos = roster2.splice(0, len);
       console.log('3.lottos: ', lottos.join(','));
       if (lottos.length < len) {
@@ -125,7 +176,7 @@ const Lotto = () => {
       setRank3(prev => lottos);
       setLots(prev => lottos);
     } else if (ranking === 2) {
-      const len = 5;
+      const len = CAPA_2;
       lottos = roster2.splice(0, len);
       console.log('2.lottos: ', lottos.join(','));
       if (lottos.length < len) {
@@ -135,7 +186,7 @@ const Lotto = () => {
       setRank2(prev => lottos);
       setLots(prev => lottos);
     } else if (ranking === 1) {
-      const len = 1;
+      const len = CAPA_1;
       lottos = roster2.splice(0, len);
       console.log('1.lottos: ', lottos.join(','));
       if (lottos.length < len) {
