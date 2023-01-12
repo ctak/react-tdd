@@ -2,9 +2,28 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import styled from "styled-components";
 import SlotMachine from './SlotMachine';
 import { roster } from '../resources/data_roster';
+import LottoTable from './LottoTable';
+import LottoControl from './LottoControl';
 
-const LottoBlock = styled.div``;
+const LottoBlock = styled.div`
+  position: relative;
+  height: 100vh;
 
+  .board-block {
+    position: absolute;
+    height: 10vh;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    overflow: hidden;
+    background: yellow;
+    color: red;
+  }
+`;
+const CasinoBlock = styled.div`
+  display: flex;
+  height: 90vh;
+`;
 const Lotto = () => {
   const [cards0, setCards0] = useState([]);
   const [cards1, setCards1] = useState([]);
@@ -96,14 +115,26 @@ const Lotto = () => {
 
   return (
     <LottoBlock>
-      <SlotMachine
+      <CasinoBlock>
+        <LottoTable />
+        <LottoControl />
+      </CasinoBlock>
+      <div className="board-block">
+        <div>border-block</div>
+        <div>border-block</div>
+        <div>border-block</div>
+        <div>border-block</div>
+        <div>border-block</div>
+        <div>border-block</div>
+      </div>
+      {/* <SlotMachine
         cards0={cards0}
         cards1={cards1}
         cards2={cards2}
         isSpin={isSpin}
         lotto={lotto}
       />
-      <button onClick={handleClick}>{isSpin ? 'Reset' : 'Play'}</button>
+      <button onClick={handleClick}>{isSpin ? 'Reset' : 'Play'}</button> */}
     </LottoBlock>
   );
 };
