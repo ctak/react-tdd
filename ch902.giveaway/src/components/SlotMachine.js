@@ -26,7 +26,7 @@ const SlotMachineBlock = styled.div`
   }
 
   .boxes {
-    transition: transform 1s ease-in-out;
+    transition: transform 2s ease-in-out;
     // transition: transform 1s ease-out;
     // transition: transform 1s cubic-bezier(.2,.12,0,.99)
   }
