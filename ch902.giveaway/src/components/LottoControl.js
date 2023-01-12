@@ -8,6 +8,8 @@ const LottoControlBlock = styled.div`
   display: flex;
   flex-direction: column;
   background: #72202A;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 `;
 
 const RankingButtons = styled.div`

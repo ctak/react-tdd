@@ -173,7 +173,7 @@ const Lotto = () => {
     // cards[1].push(...fillCard(max * 3, chars1));
     // cards[2].push(...fillCard(max * 3, chars2));
     // console.log('card2:', cards[2]);
-    const salt = 3;
+    const salt = 1;
     setCards0(prev => fillCard(max * salt, chars0));
     setCards1(prev => fillCard(max * salt, chars1));
     setCards2(prev => fillCard(max * salt, chars2));
@@ -182,7 +182,7 @@ const Lotto = () => {
   const onPlayClick = useCallback(() => {
     if (!isSpin) {
       setTarget();
-      setSpin(true);      
+      setSpin(true);
     }
     // setSpin(prev => {
     //   if (prev) {
@@ -195,6 +195,8 @@ const Lotto = () => {
   }, [setTarget, isSpin]);
 
   const onRankingClick = useCallback((rank) => {
+    const mapNanoid = (arr) => [...arr.map(() => nanoid(12))];
+
     if (ranking === rank) {
       // alert('동일');
       return;
@@ -224,13 +226,13 @@ const Lotto = () => {
     //
     setRanking(rank);
     if (rank === 1) {
-      setLots(prev => [...Array(1).keys()]);
+      setLots(prev => mapNanoid([...Array(1).keys()]));
     } else if (rank === 2) {
-      setLots(prev => [...Array(5).keys()]);
+      setLots(prev => mapNanoid([...Array(5).keys()]));
     } else if (rank === 3) {
-      setLots(prev => [...Array(10).keys()]);
+      setLots(prev => mapNanoid([...Array(10).keys()]));
     } else {
-      setLots(prev => [...Array(20).keys()]);
+      setLots(prev => mapNanoid([...Array(20).keys()]));
     }
   }, [ranking, rank4, rank3, rank2, rank1, onToggleBoard]);
 
@@ -283,7 +285,7 @@ const Lotto = () => {
         isVisible={isVisible}
         onClick={e => onToggleBoard(e)}
       >
-        <LottoBoard 
+        <LottoBoard
           rank1={rank1}
           rank2={rank2}
           rank3={rank3}

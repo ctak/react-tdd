@@ -16,11 +16,11 @@ const SlotMachineBlock = styled.div`
   witdh: 100%;
   aspect-ratio: 16 / 9;
 
-  ${props => 
+  ${props =>
     props.ranking === 1 && css`
       padding: 2rem;
     `}
-  
+
   .doors {
     // display: flex;
     width: 100%;
@@ -30,8 +30,8 @@ const SlotMachineBlock = styled.div`
     gap: 0.2rem;
     // gap: 1rem;
     flex: 1;
-    
-    ${props => 
+
+    ${props =>
       props.ranking === 1 && css`
         gap: 1rem;
       `}
@@ -50,9 +50,9 @@ const SlotMachineBlock = styled.div`
   }
 
   .boxes {
-    transition: transform 2s ease-in-out;
+    // transition: transform 1s ease-in-out;
     // transition: transform 1s ease-out;
-    // transition: transform 1s cubic-bezier(.2,.12,0,.99)
+    transition: transform 1s cubic-bezier(.2,.12,0,.99)
   }
 
   .box {
@@ -63,17 +63,17 @@ const SlotMachineBlock = styled.div`
     font-size: 3rem;
     font-weight: 600;
 
-    ${props => 
+    ${props =>
       props.ranking === 1 && css`
         font-size: 10rem;
       `}
-    
-    ${props => 
+
+    ${props =>
       props.ranking === 2 && css`
         font-size: 4rem;
       `}
 
-    ${props => 
+    ${props =>
       props.ranking === 4 && css`
         font-size: 2.4rem;
       `}
@@ -86,7 +86,23 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay, ranking }) 
 
   const shuffle = useCallback((_arr, index) => {
     // console.log('shuffle...');
-    const arr = [..._arr];
+    const items = [
+      '🍭',
+      '❌',
+      '⛄️',
+      '🦄',
+      '🍌',
+      '💩',
+      '👻',
+      '😻',
+      '💵',
+      '🤡',
+      '🦖',
+      '🍎',
+      '😂',
+      '🖕',
+    ];
+    const arr = [..._arr, ...items, ...items];
     // console.log(`shuffle(${index})::[${target[index]}]::arr:`, arr.join('-'));
     let m = arr.length;
     while (m) {
@@ -110,7 +126,7 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay, ranking }) 
     return arr;
   }, [lotto]);
 
-  const init = useCallback((firstInit = true, duration = 2) => {
+  const init = useCallback((firstInit = true, duration = 3) => {
     // console.log(`init(${firstInit})...`);
     const doors = elRef.current.querySelectorAll('.door');
 
@@ -136,7 +152,12 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay, ranking }) 
       const boxesClone = boxes.cloneNode(false);
       //const pool = ['❓'];
       // pools[idx] = ['❓'];
-      pools[idx] = ['🧧'];
+      const unicode = ranking === 1 ? '🥇'
+        : ranking === 2 ? '🥈'
+        : ranking === 3 ? '🥉'
+        : '🧧';
+
+      pools[idx] = [unicode];
 
       if (!firstInit) {
          // console.log('firstInit is false');
@@ -179,11 +200,11 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay, ranking }) 
         box.textContent = pools[idx][i];
         boxesClone.appendChild(box);
       }
-      boxesClone.style.transitionDuration = `${duration > 0 ? duration : 1}s`;
+      boxesClone.style.transitionDuration = `${ranking === 1 ? 10 : ranking === 2 ? 7 : duration > 0 ? duration : 1}s`;
       boxesClone.style.transform = `translateY(-${door.clientHeight * (pools[idx].length - 1)}px)`;
       door.replaceChild(boxesClone, boxes);
     }
-  }, [cards0, cards1, cards2, shuffle]);
+  }, [cards0, cards1, cards2, shuffle, ranking]);
 
   const spin = useCallback(async () => {
     // console.log('spin...');
@@ -207,15 +228,18 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay, ranking }) 
 
   useEffect(() => {
     // console.log('useEffect() #2');
+    // const timeout = delay * Math.floor(Math.random() * 5) * 100;
+    // const timeout = delay * 500;
+    const timeout = delay * 1000;
     if (isSpin) {
+      // spin();
       setTimeout(() => {
         spin();
-      }, delay * Math.floor(Math.random() * 5) * 100);
-      // spin();
+      }, timeout);
     } else {
       init();
     }
-  }, [isSpin, spin, init]);
+  }, [isSpin, spin, init, delay]);
 
   return (
     <SlotMachineBlock ranking={ranking}>
