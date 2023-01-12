@@ -1,3 +1,10 @@
+# TODOS
+## [아직도] 만들기
+## const queen = '홍길동,2'
+## 디자인 freepic
+  - https://www.freepik.com/search?format=search&page=4&query=slot+machine&selection=1&type=vector
+
+================================================================
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
