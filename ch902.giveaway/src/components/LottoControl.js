@@ -31,6 +31,7 @@ const PlayerButtons = styled.div`
   .play-block {
     display: flex;
     padding: 2rem;
+    padding-bottom: 3rem;
     justify-content: center;
     align-items: center;
   }
@@ -39,6 +40,7 @@ const PlayerButtons = styled.div`
     padding: 1rem;
     justify-content: center;
     align-items: center;
+    padding-bottom: 1rem;
   }
 `;
 

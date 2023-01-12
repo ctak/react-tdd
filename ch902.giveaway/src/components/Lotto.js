@@ -1,30 +1,43 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import SlotMachine from './SlotMachine';
 import { roster } from '../resources/data_roster';
 import LottoTable from './LottoTable';
 import LottoControl from './LottoControl';
 import { nanoid } from 'nanoid';
 import { shuffle } from '../lib/tdashUtils';
+import LottoBoard from './LottoBoard';
 
 const LottoBlock = styled.div`
   position: relative;
   height: 100vh;
-
-  .board-block {
-    position: absolute;
-    height: 10vh;
-    left: 0;
-    right: 0;
-    bottom: 0px;
-    overflow: hidden;
-    background: yellow;
-    color: red;
-  }
 `;
 const CasinoBlock = styled.div`
   display: flex;
   height: 90vh;
+`;
+
+const BoardBlock = styled.div`
+  z-index: 20;
+  position: absolute;
+  height: 10vh;
+  left: 0;
+  right: 0;
+  bottom: 0px;
+  overflow: hidden;
+  background: #130326;
+  transition: height 0.3s;
+  transition-timing-function: ease-in;
+  border-top-left-radius: 2rem;
+  // border-top-right-radius: 1rem;
+  padding: 3rem 2rem 1rem;
+
+    ${props =>
+      props.isVisible &&
+      css`
+        height: 90vh;
+      `}
+
 `;
 
 const Lotto = () => {
@@ -42,6 +55,8 @@ const Lotto = () => {
   const [rank3, setRank3] = useState([]);
   const [rank2, setRank2] = useState([]);
   const [rank1, setRank1] = useState([]);
+
+  const [isVisible, setVisible] = useState(false); // 아래 결과 Board.
 
   const rosterRef = useRef(null);
 
@@ -224,6 +239,12 @@ const Lotto = () => {
     // setRanking(4);
   }, [names]);
 
+  const onToggleBoard = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setVisible(prev => !prev);
+  }, []);
+
   useEffect(() => {
     console.log('start...');
     set();
@@ -236,12 +257,13 @@ const Lotto = () => {
         <LottoTable ranking={ranking}>
           {lots.map((lot, index) => (
             <SlotMachine
-              key={nanoid(12)}
+              key={lot + index}
               cards0={cards0}
               cards1={cards1}
               cards2={cards2}
               isSpin={isSpin}
               lotto={lot}
+              delay={index}
             />
           ))}
         </LottoTable>
@@ -251,14 +273,17 @@ const Lotto = () => {
           onResetClick={onResetClick}
         />
       </CasinoBlock>
-      <div className="board-block">
-        <div>border-block</div>
-        <div>border-block</div>
-        <div>border-block</div>
-        <div>border-block</div>
-        <div>border-block</div>
-        <div>border-block</div>
-      </div>
+      <BoardBlock
+        isVisible={isVisible}
+        onClick={e => onToggleBoard(e)}
+      >
+        <LottoBoard 
+          rank1={rank1}
+          rank2={rank2}
+          rank3={rank3}
+          rank4={rank4}
+        />
+      </BoardBlock>
     </LottoBlock>
   );
 };

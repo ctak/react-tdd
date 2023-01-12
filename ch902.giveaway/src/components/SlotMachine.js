@@ -5,7 +5,6 @@ import styled from 'styled-components';
  * Styled React Functional Component
  */
 
-// 🧧 🥉 🥉 🥉
 const SlotMachineBlock = styled.div`
   background: #35654d;
   // background: #c9272c;
@@ -56,7 +55,7 @@ const SlotMachineBlock = styled.div`
   }
 `;
 
-const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto }) => {
+const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay }) => {
 
   const elRef = useRef(null);
 
@@ -184,7 +183,10 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto }) => {
   useEffect(() => {
     console.log('useEffect() #2');
     if (isSpin) {
-      spin();
+      setTimeout(() => {
+        spin();
+      }, delay * Math.floor(Math.random() * 3) * 100);
+      // spin();
     } else {
       init();
     }

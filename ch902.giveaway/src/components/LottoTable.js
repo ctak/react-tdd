@@ -6,7 +6,9 @@ const LottoTableBlock = styled.div`
   flex: 1;
   // background: #35654d;
   // background: #002244;
-  background: #F5F6F7;
+  // background: #F5F6F7;
+  background: #B2C7DA;
+  overflow: hidden;
 `;
 
 const Contents = styled.div`
@@ -53,4 +55,4 @@ const LottoTable= ({ ranking, children }) => {
   );
 };
 
-export default LottoTable;
+export default React.memo(LottoTable);
