@@ -230,7 +230,7 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay, ranking }) 
     // console.log('useEffect() #2');
     // const timeout = delay * Math.floor(Math.random() * 5) * 100;
     // const timeout = delay * 500;
-    const timeout = delay * 1000;
+    const timeout = delay === 0 ? 0 : ranking === 2 ? (delay * 4) * 1000 : delay * 1000;
     if (isSpin) {
       // spin();
       setTimeout(() => {
@@ -239,7 +239,7 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay, ranking }) 
     } else {
       init();
     }
-  }, [isSpin, spin, init, delay]);
+  }, [isSpin, spin, init, delay, ranking]);
 
   return (
     <SlotMachineBlock ranking={ranking}>
