@@ -8,21 +8,37 @@ import styled from 'styled-components';
 // 🧧 🥉 🥉 🥉
 const SlotMachineBlock = styled.div`
   background: #35654d;
-  padding: 3rem;
-  overflow: hidden;
-
+  // background: #c9272c;
+  // background: radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
+  //             radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
+  border-radius: 5px;
+  padding: 1rem;
+  // overflow: hidden;
+  witdh: 100%;
+  aspect-ratio: 16 / 9;
+  
   .doors {
-    display: inline-flex;
-    // border: 1px solid red;
+    // display: flex;
+    width: 100%;
+    // border: 1px solid blue;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.2rem;
+    // gap: 1rem;
+    flex: 1;
+    
   }
 
   .door {
     background: #fafafa;
-    width: 100px;
-    height: 110px;
+    width: 100%;
+    // height: 100%;
+    aspect-ratio: 9 / 12;
+    // height: 110px;
     overflow: hidden;
     border-radius: 5px;
-    margin: 5px;
+    // margin: 5px;
+    // border: 2px solid red;
   }
 
   .boxes {
@@ -171,27 +187,29 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto }) => {
     } else {
       init();
     }
-  }, [isSpin, spin]);
+  }, [isSpin, spin, init]);
 
   return (
     <SlotMachineBlock>
-      <div className="doors" ref={elRef}>
-        <div className="door">
-          <div className="boxes">
-            {/* <div className="box">🥉</div> */}
+      {/* <div className="device-block"> */}
+        <div className="doors" ref={elRef}>
+          <div className="door">
+            <div className="boxes">
+              {/* <div className="box">🥉</div> */}
+            </div>
+          </div>
+          <div className="door">
+            <div className="boxes">
+              {/* <div className="box">탁</div> */}
+            </div>
+          </div>
+          <div className="door">
+            <div className="boxes">
+              {/* <div className="box">🥉</div> */}
+            </div>
           </div>
         </div>
-        <div className="door">
-          <div className="boxes">
-            {/* <div className="box">탁</div> */}
-          </div>
-        </div>
-        <div className="door">
-          <div className="boxes">
-            {/* <div className="box">🥉</div> */}
-          </div>
-        </div>
-      </div>
+      {/* </div> */}
     </SlotMachineBlock>
   );
 };

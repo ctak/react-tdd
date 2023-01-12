@@ -44,18 +44,33 @@ const PlayerButtons = styled.div`
 
 // 🧧 🥉 🥉 🥉
 
-const LottoControl= () => {
+const LottoControl= ({ onRankingClick, onPlayClick }) => {
   return (
     <LottoControlBlock>
       <RankingButtons>
-        <GoldenButton fullWidth><span>🥇</span> 1등 추천</GoldenButton>
-        <GoldenButton fullWidth><span>🥈</span> 2등 추천</GoldenButton>
-        <GoldenButton fullWidth><span>🥉</span> 3등 추천</GoldenButton>
-        <GoldenButton fullWidth><span>🏅</span> 4등 추천</GoldenButton>
+        <GoldenButton fullWidth
+          onClick={e => onRankingClick(1)}
+        ><span>🥇</span> 1등 추천</GoldenButton>
+
+        <GoldenButton fullWidth
+          onClick={e => onRankingClick(2)}
+        ><span>🥈</span> 2등 추천</GoldenButton>
+
+        <GoldenButton fullWidth
+          onClick={e => onRankingClick(3)}
+        ><span>🥉</span> 3등 추천</GoldenButton>
+
+        <GoldenButton fullWidth
+          onClick={e => onRankingClick(4)}
+        ><span>🏅</span> 4등 추천</GoldenButton>
       </RankingButtons>
       <PlayerButtons>
         <div className="play-block">
-          <PlayButton>Play</PlayButton>
+          <PlayButton
+            onClick={e => onPlayClick()}
+          >
+            Play
+          </PlayButton>
         </div>
         <div className="reset-block">
           <ResetButton>Reset</ResetButton>

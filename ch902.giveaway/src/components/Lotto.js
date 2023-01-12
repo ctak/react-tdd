@@ -4,6 +4,7 @@ import SlotMachine from './SlotMachine';
 import { roster } from '../resources/data_roster';
 import LottoTable from './LottoTable';
 import LottoControl from './LottoControl';
+import { nanoid } from 'nanoid';
 
 const LottoBlock = styled.div`
   position: relative;
@@ -25,6 +26,9 @@ const CasinoBlock = styled.div`
   height: 90vh;
 `;
 const Lotto = () => {
+  const [ranking, setRanking] = useState(4);
+  const [lots, setLots] = useState([...Array(20).keys()]);
+
   const [cards0, setCards0] = useState([]);
   const [cards1, setCards1] = useState([]);
   const [cards2, setCards2] = useState([]);
@@ -95,7 +99,7 @@ const Lotto = () => {
     setCards2(prev => fillCard(max * salt, chars2));
   }, [names]);
 
-  const handleClick = useCallback(() => {
+  const onPlayClick = useCallback(() => {
     // setTarget();
     setSpin(prev => {
       if (prev) {
@@ -107,6 +111,19 @@ const Lotto = () => {
     });
   }, [setTarget]);
 
+  const onRankingClick = useCallback((rank) => {
+    setRanking(prev => rank);
+    if (rank === 1) {
+      setLots(prev => [...Array(1).keys()]);
+    } else if (rank === 2) {
+      setLots(prev => [...Array(5).keys()]);
+    } else if (rank === 3) {
+      setLots(prev => [...Array(10).keys()]);
+    } else {
+      setLots(prev => [...Array(20).keys()]);
+    }
+  }, []);
+
   useEffect(() => {
     console.log('start...');
     set();
@@ -116,8 +133,22 @@ const Lotto = () => {
   return (
     <LottoBlock>
       <CasinoBlock>
-        <LottoTable />
-        <LottoControl />
+        <LottoTable ranking={ranking}>
+          {lots.map((lot, index) => (
+            <SlotMachine
+              key={nanoid(12)}
+              cards0={cards0}
+              cards1={cards1}
+              cards2={cards2}
+              isSpin={isSpin}
+              lotto={lotto}
+            />
+          ))}
+        </LottoTable>
+        <LottoControl
+          onRankingClick={onRankingClick}
+          onPlayClick={onPlayClick}
+        />
       </CasinoBlock>
       <div className="board-block">
         <div>border-block</div>
