@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 /**
  * Styled React Functional Component
@@ -15,6 +15,11 @@ const SlotMachineBlock = styled.div`
   // overflow: hidden;
   witdh: 100%;
   aspect-ratio: 16 / 9;
+
+  ${props => 
+    props.ranking === 1 && css`
+      padding: 2rem;
+    `}
   
   .doors {
     // display: flex;
@@ -26,6 +31,10 @@ const SlotMachineBlock = styled.div`
     // gap: 1rem;
     flex: 1;
     
+    ${props => 
+      props.ranking === 1 && css`
+        gap: 1rem;
+      `}
   }
 
   .door {
@@ -52,15 +61,31 @@ const SlotMachineBlock = styled.div`
     justify-content: center;
     align-items: center;
     font-size: 3rem;
+    font-weight: 600;
+
+    ${props => 
+      props.ranking === 1 && css`
+        font-size: 10rem;
+      `}
+    
+    ${props => 
+      props.ranking === 2 && css`
+        font-size: 4rem;
+      `}
+
+    ${props => 
+      props.ranking === 4 && css`
+        font-size: 2.4rem;
+      `}
   }
 `;
 
-const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay }) => {
+const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay, ranking }) => {
 
   const elRef = useRef(null);
 
   const shuffle = useCallback((_arr, index) => {
-    console.log('shuffle...');
+    // console.log('shuffle...');
     const arr = [..._arr];
     // console.log(`shuffle(${index})::[${target[index]}]::arr:`, arr.join('-'));
     let m = arr.length;
@@ -70,7 +95,7 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay }) => {
     }
 
     if (lotto) {
-      console.log(`lotto:<${lotto}>...`)
+      // console.log(`lotto:<${lotto}>...`)
       const target = lotto.split('');
       if (target.length === 2) { target.push(''); }
       //
@@ -86,7 +111,7 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay }) => {
   }, [lotto]);
 
   const init = useCallback((firstInit = true, duration = 2) => {
-    console.log(`init(${firstInit})...`);
+    // console.log(`init(${firstInit})...`);
     const doors = elRef.current.querySelectorAll('.door');
 
     const pools = [
@@ -161,7 +186,7 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay }) => {
   }, [cards0, cards1, cards2, shuffle]);
 
   const spin = useCallback(async () => {
-    console.log('spin...');
+    // console.log('spin...');
     const doors = elRef.current.querySelectorAll('.door');
     // setTarget();
     // init(false, 1, 2);
@@ -176,16 +201,16 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay }) => {
   }, [init]);
 
   useEffect(() => {
-    console.log('useEffect() #1');
+    // console.log('useEffect() #1');
     init();
   }, [init]);
 
   useEffect(() => {
-    console.log('useEffect() #2');
+    // console.log('useEffect() #2');
     if (isSpin) {
       setTimeout(() => {
         spin();
-      }, delay * Math.floor(Math.random() * 3) * 100);
+      }, delay * Math.floor(Math.random() * 5) * 100);
       // spin();
     } else {
       init();
@@ -193,7 +218,7 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto, delay }) => {
   }, [isSpin, spin, init]);
 
   return (
-    <SlotMachineBlock>
+    <SlotMachineBlock ranking={ranking}>
       {/* <div className="device-block"> */}
         <div className="doors" ref={elRef}>
           <div className="door">

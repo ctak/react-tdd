@@ -60,6 +60,12 @@ const Lotto = () => {
 
   const rosterRef = useRef(null);
 
+  const onToggleBoard = useCallback(() => {
+    // e.preventDefault();
+    // e.stopPropagation();
+    setVisible(prev => !prev);
+  }, []);
+
   // const names = useMemo(() => ([...roster.split(',')]), []);
   const names = useMemo(() => {
     const list = [...roster.split(',')];
@@ -190,23 +196,27 @@ const Lotto = () => {
 
   const onRankingClick = useCallback((rank) => {
     if (ranking === rank) {
-      alert('동일');
+      // alert('동일');
       return;
     } else {
       if (rank === 4 && rank4.length > 0) {
-        alert('4등은 이미 뽑았습니다! 뽑힌 화면을 보여주어야 해.');
+        // alert('4등은 이미 뽑았습니다! 뽑힌 화면을 보여주어야 해.');
+        onToggleBoard();
         return;
       }
       if (rank === 3 && rank3.length > 0) {
-        alert('3등은 이미 뽑았습니다!');
+        // alert('3등은 이미 뽑았습니다!');
+        onToggleBoard();
         return;
       }
       if (rank === 2 && rank2.length > 0) {
-        alert('2등은 이미 뽑았습니다!');
+        // alert('2등은 이미 뽑았습니다!');
+        onToggleBoard();
         return;
       }
       if (rank === 1 && rank1.length > 0) {
-        alert('모두 뽑았습니다!');
+        // alert('모두 뽑았습니다!');
+        onToggleBoard();
         return;
       }
       setSpin(false);
@@ -222,7 +232,7 @@ const Lotto = () => {
     } else {
       setLots(prev => [...Array(20).keys()]);
     }
-  }, [ranking, rank4, rank3, rank2, rank1]);
+  }, [ranking, rank4, rank3, rank2, rank1, onToggleBoard]);
 
   const onResetClick = useCallback(() => {
     // 일단 roster 를 갱신해야 함.
@@ -239,11 +249,6 @@ const Lotto = () => {
     // setRanking(4);
   }, [names]);
 
-  const onToggleBoard = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setVisible(prev => !prev);
-  }, []);
 
   useEffect(() => {
     console.log('start...');
@@ -257,13 +262,14 @@ const Lotto = () => {
         <LottoTable ranking={ranking}>
           {lots.map((lot, index) => (
             <SlotMachine
-              key={lot + index}
+              key={lot}
               cards0={cards0}
               cards1={cards1}
               cards2={cards2}
               isSpin={isSpin}
               lotto={lot}
               delay={index}
+              ranking={ranking}
             />
           ))}
         </LottoTable>
