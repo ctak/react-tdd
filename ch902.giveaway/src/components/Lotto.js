@@ -1,10 +1,11 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import styled from "styled-components";
 import SlotMachine from './SlotMachine';
 import { roster } from '../resources/data_roster';
 import LottoTable from './LottoTable';
 import LottoControl from './LottoControl';
 import { nanoid } from 'nanoid';
+import { shuffle } from '../lib/tdashUtils';
 
 const LottoBlock = styled.div`
   position: relative;
@@ -25,6 +26,7 @@ const CasinoBlock = styled.div`
   display: flex;
   height: 90vh;
 `;
+
 const Lotto = () => {
   const [ranking, setRanking] = useState(4);
   const [lots, setLots] = useState([...Array(20).keys()]);
@@ -34,12 +36,20 @@ const Lotto = () => {
   const [cards2, setCards2] = useState([]);
 
   const [isSpin, setSpin] = useState(false);
-  const [lotto, setLotto] = useState(null);
+  // const [lotto, setLotto] = useState(null);
+
+  const [rank4, setRank4] = useState([]);
+  const [rank3, setRank3] = useState([]);
+  const [rank2, setRank2] = useState([]);
+  const [rank1, setRank1] = useState([]);
+
+  const rosterRef = useRef(null);
 
   // const names = useMemo(() => ([...roster.split(',')]), []);
   const names = useMemo(() => {
     const list = [...roster.split(',')];
     console.log('!!!! roster.length => ' + list.length);
+    rosterRef.current = list;
     return list;
   }, []);
 
@@ -59,14 +69,63 @@ const Lotto = () => {
   const setTarget = useCallback(() => {
     console.log('!!!! setTarget');
     // target.length = 0;
-    const targetIdx = Math.floor(Math.random() * names.length);
-    // console.log('targetIdx:', targetIdx);
-    const targetName = names[targetIdx];
-    console.log('targetName:', targetName);
-    // target.push(...targetName.split(''));
-    // if (target.length === 2) { target.push(''); }
-    setLotto(targetName);
-  }, [names]);
+    // const targetIdx = Math.floor(Math.random() * names.length);
+    // // console.log('targetIdx:', targetIdx);
+    // const targetName = names[targetIdx];
+    // console.log('targetName:', targetName);
+    // // target.push(...targetName.split(''));
+    // // if (target.length === 2) { target.push(''); }
+    // setLotto(targetName);
+    const roster = rosterRef.current;
+    console.log('roster.length:', roster.length);
+    console.log('roster: ', roster.join(','));
+    const roster2 = shuffle(shuffle(roster));
+    console.log('roster2: ', roster2.join(','));
+
+    let lottos;
+    if (ranking === 4) {
+      const len = 20;
+      lottos = roster2.splice(0, len);
+      console.log('4.lottos: ', lottos.join(','));
+      if (lottos.length < len) {
+        alert('ERROR #4');
+        return;
+      }
+      setRank4(prev => lottos);
+      setLots(prev => lottos);
+    } else if (ranking === 3) {
+      const len = 10;
+      lottos = roster2.splice(0, len);
+      console.log('3.lottos: ', lottos.join(','));
+      if (lottos.length < len) {
+        alert('ERROR #3');
+        return;
+      }
+      setRank3(prev => lottos);
+      setLots(prev => lottos);
+    } else if (ranking === 2) {
+      const len = 5;
+      lottos = roster2.splice(0, len);
+      console.log('2.lottos: ', lottos.join(','));
+      if (lottos.length < len) {
+        alert('ERROR #2');
+        return;
+      }
+      setRank2(prev => lottos);
+      setLots(prev => lottos);
+    } else if (ranking === 1) {
+      const len = 1;
+      lottos = roster2.splice(0, len);
+      console.log('1.lottos: ', lottos.join(','));
+      if (lottos.length < len) {
+        alert('ERROR #1');
+        return;
+      }
+      setRank1(prev => lottos);
+      setLots(prev => lottos);
+    }
+    rosterRef.current = roster2;
+  }, [ranking]);
 
   const set = useCallback(() => {
     console.log('play test start...');
@@ -100,19 +159,45 @@ const Lotto = () => {
   }, [names]);
 
   const onPlayClick = useCallback(() => {
-    // setTarget();
-    setSpin(prev => {
-      if (prev) {
-        return false;
-      } else {
-        setTarget();
-        return true;
-      }
-    });
-  }, [setTarget]);
+    if (!isSpin) {
+      setTarget();
+      setSpin(true);      
+    }
+    // setSpin(prev => {
+    //   if (prev) {
+    //     return false;
+    //   } else {
+    //     setTarget();
+    //     return true;
+    //   }
+    // });
+  }, [setTarget, isSpin]);
 
   const onRankingClick = useCallback((rank) => {
-    setRanking(prev => rank);
+    if (ranking === rank) {
+      alert('동일');
+      return;
+    } else {
+      if (rank === 4 && rank4.length > 0) {
+        alert('4등은 이미 뽑았습니다! 뽑힌 화면을 보여주어야 해.');
+        return;
+      }
+      if (rank === 3 && rank3.length > 0) {
+        alert('3등은 이미 뽑았습니다!');
+        return;
+      }
+      if (rank === 2 && rank2.length > 0) {
+        alert('2등은 이미 뽑았습니다!');
+        return;
+      }
+      if (rank === 1 && rank1.length > 0) {
+        alert('모두 뽑았습니다!');
+        return;
+      }
+      setSpin(false);
+    }
+    //
+    setRanking(rank);
     if (rank === 1) {
       setLots(prev => [...Array(1).keys()]);
     } else if (rank === 2) {
@@ -122,7 +207,22 @@ const Lotto = () => {
     } else {
       setLots(prev => [...Array(20).keys()]);
     }
-  }, []);
+  }, [ranking, rank4, rank3, rank2, rank1]);
+
+  const onResetClick = useCallback(() => {
+    // 일단 roster 를 갱신해야 함.
+    rosterRef.current = names;
+    console.log(`reset. roster length => ${rosterRef.current.length}`);
+    //
+    setSpin(false);
+    //
+    setRank4([]);
+    setRank3([]);
+    setRank2([]);
+    setRank1([]);
+    //
+    // setRanking(4);
+  }, [names]);
 
   useEffect(() => {
     console.log('start...');
@@ -141,13 +241,14 @@ const Lotto = () => {
               cards1={cards1}
               cards2={cards2}
               isSpin={isSpin}
-              lotto={lotto}
+              lotto={lot}
             />
           ))}
         </LottoTable>
         <LottoControl
           onRankingClick={onRankingClick}
           onPlayClick={onPlayClick}
+          onResetClick={onResetClick}
         />
       </CasinoBlock>
       <div className="board-block">
@@ -158,14 +259,6 @@ const Lotto = () => {
         <div>border-block</div>
         <div>border-block</div>
       </div>
-      {/* <SlotMachine
-        cards0={cards0}
-        cards1={cards1}
-        cards2={cards2}
-        isSpin={isSpin}
-        lotto={lotto}
-      />
-      <button onClick={handleClick}>{isSpin ? 'Reset' : 'Play'}</button> */}
     </LottoBlock>
   );
 };

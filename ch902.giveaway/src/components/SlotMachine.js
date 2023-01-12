@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 
 /**
@@ -177,11 +177,12 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto }) => {
   }, [init]);
 
   useEffect(() => {
+    console.log('useEffect() #1');
     init();
   }, [init]);
 
   useEffect(() => {
-
+    console.log('useEffect() #2');
     if (isSpin) {
       spin();
     } else {
@@ -214,4 +215,4 @@ const SlotMachine = ({ cards0, cards1, cards2, isSpin, lotto }) => {
   );
 };
 
-export default SlotMachine;
+export default React.memo(SlotMachine);

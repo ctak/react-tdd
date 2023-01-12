@@ -44,7 +44,7 @@ const PlayerButtons = styled.div`
 
 // 🧧 🥉 🥉 🥉
 
-const LottoControl= ({ onRankingClick, onPlayClick }) => {
+const LottoControl= ({ onRankingClick, onPlayClick, onResetClick }) => {
   return (
     <LottoControlBlock>
       <RankingButtons>
@@ -73,7 +73,11 @@ const LottoControl= ({ onRankingClick, onPlayClick }) => {
           </PlayButton>
         </div>
         <div className="reset-block">
-          <ResetButton>Reset</ResetButton>
+          <ResetButton
+            onClick={e => onResetClick()}
+          >
+            Reset
+          </ResetButton>
         </div>
       </PlayerButtons>
     </LottoControlBlock>
