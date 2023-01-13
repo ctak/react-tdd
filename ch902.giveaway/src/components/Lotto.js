@@ -84,7 +84,7 @@ const Lotto = () => {
       if (queen) {
         [queenRef.current, queenRankRef.current] = queen.split(',');
       }
-      console.log(`queen:<${queenRef.current},${queenRankRef.current}>`);
+      // console.log(`queen:<${queenRef.current},${queenRankRef.current}>`);
     } catch (e) {
       console.log('localStorage is not working');
     }
@@ -122,6 +122,7 @@ const Lotto = () => {
           }
           shuffled = shuffle(shuffle(roster));
           console.log(`>>>> shuffled #1: ${i}:`, shuffled.join(','));
+          queenRankRef.current = null;
         }
       } else if (queenRank !== ranking) {
         for (let i = 1; i < 100; i++) {
