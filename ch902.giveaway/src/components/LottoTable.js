@@ -37,6 +37,8 @@ const Contents = styled.div`
     props.ranking === 1 &&
     css`
       grid-template-columns: repeat(1, 1fr); // #1
+      padding-right: 10rem;
+      padding-left: 10rem;
     `}    
 
   & > div {
