@@ -107,7 +107,7 @@ const Lotto = () => {
   const setTarget = useCallback(() => {
     //
     function _shuffle(roster, ranking) {
-      let shuffled = shuffle(shuffle(roster));
+      let shuffled = shuffle(shuffle(shuffle(roster)));
       console.log('>>>> shuffled: ', shuffled.join(','));
       const idx = ranking === 4 ? CAPA_4
         : ranking === 3 ? CAPA_3
